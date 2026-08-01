@@ -1,0 +1,29 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+
+{% block title %}Register — SmartQueue AI{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+    <div class="auth-card">
+        <h2>Create Your Account</h2>
+        <p class="auth-subtitle">Join SmartQueueAI and streamline your queues</p>
+
+        <form method="post" class="auth-form">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+                <p class="field-error">{{ field.errors.0 }}</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+    <button type="submit" class="btn-filled full-width">Sign Up</button>
+</form>
+    </div>
+</section>
+
+{% endblock %}

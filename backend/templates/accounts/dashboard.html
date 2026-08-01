@@ -1,0 +1,279 @@
+{% extends "accounts/base.html" %}
+
+{% block content %}
+
+<!-- Include Chart.js library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<section class="hero" style="padding: 40px 5% 80px;">
+
+<div class="appointment-card" style="max-width: 1200px; margin-top: 0; padding: 40px 30px;">
+
+    <h1 style="margin-bottom: 8px; font-family: 'Poppins', sans-serif; font-weight: 900;">SmartQueue Dashboard</h1>
+    <p style="color: var(--text-secondary); margin-bottom: 40px;">Real-time AI telemetry, active tokens, and scheduling analytics</p>
+
+    <!-- Statistics Grid -->
+    <div class="stats-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px;">
+        <div class="service-card" style="padding: 20px; text-align: center; box-shadow: 0 10px 0px -4px rgba(37,99,235,0.06); border-radius: 18px;">
+            <h2 style="font-size: 2.2rem; color: var(--blue); margin-bottom: 5px;">{{ total }}</h2>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Total Bookings</p>
+        </div>
+        <div class="service-card" style="padding: 20px; text-align: center; box-shadow: 0 10px 0px -4px rgba(37,99,235,0.06); border-radius: 18px;">
+            <h2 style="font-size: 2.2rem; color: #F59E0B; margin-bottom: 5px;">{{ waiting }}</h2>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Waiting</p>
+        </div>
+        <div class="service-card" style="padding: 20px; text-align: center; box-shadow: 0 10px 0px -4px rgba(37,99,235,0.06); border-radius: 18px;">
+            <h2 style="font-size: 2.2rem; color: var(--cyan); margin-bottom: 5px;">{{ serving }}</h2>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Active Serving</p>
+        </div>
+        <div class="service-card" style="padding: 20px; text-align: center; box-shadow: 0 10px 0px -4px rgba(37,99,235,0.06); border-radius: 18px;">
+            <h2 style="font-size: 2.2rem; color: #10B981; margin-bottom: 5px;">{{ completed }}</h2>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Completed</p>
+        </div>
+    </div>
+
+    <!-- Smart Slot Crowded Warning Recommendation -->
+    {% if is_crowded %}
+    <div style="background: rgba(245, 158, 11, 0.08); border: 1.5px dashed #F59E0B; border-radius: 16px; padding: 20px; margin-bottom: 40px; text-align: left; animation: slideDown 0.4s ease-out;">
+        <h4 style="color: #D97706; font-size: 1.05rem; margin-bottom: 8px; font-weight: 700;"><i class="fas fa-exclamation-triangle"></i> This slot is expected to be busy!</h4>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 10px;">Our AI models predict high traffic density during your requested time window.</p>
+        <div style="display: flex; gap: 15px; flex-wrap: wrap; font-size: 0.9rem; color: var(--text-primary);">
+            <span>💡 Suggested slot: <strong>{{ suggested_slot }}</strong></span>
+            <span>⏱️ Expected wait: <strong style="color: var(--blue);">{{ suggested_wait }}</strong></span>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Main Dashboard Split Content -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 40px;">
+        
+        <!-- Left: Ticket & AI Prediction Details -->
+        <div style="display: flex; flex-direction: column; gap: 30px;">
+            
+            <!-- Ticket Info & QR Code -->
+            <div class="service-card" style="text-align: left; padding: 30px; border-radius: 20px;">
+                <h2 style="font-size: 1.25rem; margin-bottom: 20px; color: var(--text-primary); border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; font-weight: 800;"><i class="fas fa-ticket-alt text-cyan"></i> Active Token Ticket</h2>
+                {% if latest_appointment %}
+                    <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 180px;">
+                            <p style="margin-bottom: 8px;"><strong>Organization:</strong> <span style="color: var(--text-primary); font-weight: 700;">{{ latest_appointment.organization_name }}</span></p>
+                            <p style="margin-bottom: 8px;"><strong>Department:</strong> {{ latest_appointment.department }}</p>
+                            {% if latest_appointment.doctor_or_counter %}
+                            <p style="margin-bottom: 8px;"><strong>Assignee:</strong> {{ latest_appointment.doctor_or_counter }}</p>
+                            {% endif %}
+                            <p style="margin-bottom: 8px;"><strong>Token:</strong> <span style="color: var(--blue); font-weight: 900; font-size: 1.25rem;">{{ latest_appointment.token_number }}</span></p>
+                            <p style="margin-bottom: 8px;"><strong>Time Slot:</strong> {{ latest_appointment.appointment_time }}</p>
+                            <p style="margin-bottom: 8px;"><strong>Date:</strong> {{ latest_appointment.appointment_date }}</p>
+                            <p style="margin-bottom: 8px;"><strong>Queue Status:</strong> 
+                                <span style="font-weight: 800; text-transform: uppercase; color: {% if latest_appointment.status == 'Serving' %}#10B981{% elif latest_appointment.status == 'Completed' %}var(--blue){% elif latest_appointment.status == 'Cancelled' %}#EF4444{% else %}#F59E0B{% endif %};">
+                                    {{ latest_appointment.status }}
+                                </span>
+                            </p>
+                            <p style="margin-bottom: 8px;"><strong>AI Priority Triage:</strong> 
+                                <span style="color: {% if latest_appointment.priority == 'Emergency' %}#EF4444{% elif latest_appointment.priority == 'Senior Citizen' %}var(--blue){% else %}var(--text-secondary){% endif %}; font-weight: 700;">
+                                    {{ latest_appointment.priority }}
+                                </span>
+                            </p>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); font-style: italic; border-left: 3px solid var(--blue); padding-left: 8px; margin-top: 10px;">Rules Applied: {{ latest_appointment.priority_reason }}</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=Token-{{ latest_appointment.token_number }}-Org-{{ latest_appointment.organization_name }}&color=2563eb&bgcolor=ffffff" alt="Ticket QR" style="border: 2px solid var(--glass-border); border-radius: 12px; background: #fff; padding: 8px; box-shadow: 0 4px 15px rgba(37,99,235,0.08);">
+                            <p style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 8px; font-weight: 600;">Scan at desk check-in</p>
+                        </div>
+                    </div>
+                {% else %}
+                    <p style="color: var(--text-secondary);">No active tokens. Book a slot below to generate a check-in ticket.</p>
+                {% endif %}
+            </div>
+
+            <!-- AI Engine Telemetry Predictor -->
+            <div class="service-card" style="text-align: left; padding: 30px; border-radius: 20px; background: linear-gradient(135deg, rgba(37, 99, 235, 0.03) 0%, rgba(255, 255, 255, 0.85) 100%);">
+                <h2 style="font-size: 1.25rem; margin-bottom: 20px; color: var(--text-primary); border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; font-weight: 800;"><i class="fas fa-brain text-cyan"></i> AI Prediction Model (Random Forest)</h2>
+                {% if latest_appointment and latest_appointment.status == 'Waiting' or latest_appointment.status == 'Serving' %}
+                    <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.95rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>Expected Wait:</span>
+                            <strong style="color: var(--blue); font-size: 1.15rem;">{{ latest_appointment.estimated_wait_time }} Minutes</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>Model Confidence:</span>
+                            <strong style="color: #10B981;">{{ latest_appointment.confidence_score }}%</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>Organization Distance:</span>
+                            <strong style="color: var(--text-primary);">{{ latest_appointment.distance }}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>Current Lobby Serving:</span>
+                            <strong style="color: var(--cyan);">{% if current_serving %}{{ current_serving.token_number }}{% else %}None{% endif %}</strong>
+                        </div>
+                        
+                        <!-- Queue Progress Bar -->
+                        <div style="margin-top: 15px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 5px;">
+                                <span>Queue Position Progress</span>
+                                <span>{{ people_ahead }} people ahead</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: rgba(37,99,235,0.08); border-radius: 20px; overflow: hidden;">
+                                <div style="width: {% if latest_appointment.status == 'Serving' %}100%{% else %}{{ people_ahead|default:0|yesno:"45,85" }}%{% endif %}; height: 100%; background: linear-gradient(90deg, var(--blue), var(--cyan)); box-shadow: 0 0 8px rgba(37,99,235,0.2); border-radius: 20px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <p style="color: var(--text-secondary);">AI model idle. Awaiting active appointment token assignment.</p>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <!-- Right: Notifications & Appointment Lists -->
+        <div style="display: flex; flex-direction: column; gap: 30px;">
+            
+            <!-- Live Notifications In-app Feed -->
+            <div class="service-card" style="text-align: left; padding: 30px; border-radius: 20px; max-height: 250px; overflow-y: auto;">
+                <h2 style="font-size: 1.15rem; margin-bottom: 15px; color: var(--text-primary); border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; font-weight: 800;"><i class="fas fa-bell text-cyan"></i> In-App Alerts</h2>
+                {% if notifications %}
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        {% for n in notifications %}
+                            <div style="font-size: 0.82rem; background: rgba(37,99,235,0.04); padding: 10px 12px; border-radius: 8px; border-left: 3.5px solid var(--blue); color: var(--text-primary); border-top: 1px solid var(--glass-border); border-right: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);">
+                                {{ n.message }}
+                                <span style="display: block; font-size: 0.7rem; color: var(--text-secondary); margin-top: 3px;"><i class="far fa-clock"></i> {{ n.created_at|timesince }} ago</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">No incoming notifications.</p>
+                {% endif %}
+            </div>
+
+            <!-- List of Upcoming appointments -->
+            <div class="service-card" style="text-align: left; padding: 30px; border-radius: 20px; max-height: 250px; overflow-y: auto;">
+                <h2 style="font-size: 1.15rem; margin-bottom: 15px; color: var(--text-primary); border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; font-weight: 800;"><i class="fas fa-calendar-check text-cyan"></i> Upcoming Appointments</h2>
+                {% if upcoming_appointments %}
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        {% for app in upcoming_appointments %}
+                            <div style="font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.9); padding: 12px 14px; border-radius: 8px; border: 1px solid var(--glass-border);">
+                                <div>
+                                    <span style="font-weight: bold; color: var(--blue);">{{ app.token_number }}</span> — {{ app.organization_name }}
+                                    <span style="display: block; font-size: 0.72rem; color: var(--text-secondary);">{{ app.department }} • {{ app.appointment_date }} at {{ app.appointment_time }}</span>
+                                </div>
+                                <span style="font-size: 0.75rem; background: rgba(245, 158, 11, 0.1); color: #D97706; border: 1px solid rgba(245,158,11,0.2); padding: 2px 8px; border-radius: 20px; font-weight: 700;">{{ app.status }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">No upcoming appointments scheduled.</p>
+                {% endif %}
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- AI Analytics Panel with Charts -->
+    <div class="service-card" style="width: 100%; text-align: left; margin-bottom: 40px; padding: 30px; border-radius: 20px;">
+        <h2 style="font-size: 1.35rem; margin-bottom: 25px; color: var(--text-primary); border-bottom: 1px solid var(--glass-border); padding-bottom: 12px; display: flex; align-items: center; gap: 8px; font-weight: 800;">
+            <span>📈</span> AI Queue Forecaster & Performance Analytics
+        </h2>
+        
+        <div style="display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; width: 100%;">
+            <!-- Doughnut Chart -->
+            <div style="flex: 1; min-width: 280px; max-width: 400px; height: 300px; display: flex; flex-direction: column; align-items: center;">
+                <h4 style="font-size: 0.9rem; text-align: center; color: var(--text-secondary); margin-bottom: 15px; font-weight: 600;">Queue Distribution by Service</h4>
+                <div style="width: 100%; height: 230px; position: relative;">
+                    <canvas id="serviceChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Bar Chart -->
+            <div style="flex: 1; min-width: 280px; max-width: 400px; height: 300px; display: flex; flex-direction: column; align-items: center;">
+                <h4 style="font-size: 0.9rem; text-align: center; color: var(--text-secondary); margin-bottom: 15px; font-weight: 600;">Wait Time Trend by Hour</h4>
+                <div style="width: 100%; height: 230px; position: relative;">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="button-area">
+        <a href="{% url 'book' %}" class="book-btn" style="padding: 14px 32px; font-size: 1rem; border-radius: 30px;">
+            Book New Appointment
+        </a>
+    </div>
+
+</div>
+
+</section>
+
+<!-- Chart Setup Script -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const distData = {{ chart_distribution_json|safe }};
+        const services = ['Hospital', 'Bank', 'University', 'Government', 'Service Center'];
+        const values = services.map(s => distData[s] || 0);
+
+        // 1. Service Distribution Doughnut Chart
+        const ctxService = document.getElementById('serviceChart').getContext('2d');
+        new Chart(ctxService, {
+            type: 'doughnut',
+            data: {
+                labels: services,
+                datasets: [{
+                    data: values,
+                    backgroundColor: ['#0ea5e9', '#2563eb', '#6366f1', '#ef4444', '#10b981'],
+                    borderColor: '#ffffff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#475569',
+                            font: { family: 'Poppins', size: 10 }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 2. Hourly Wait Time Trend Bar Chart
+        const ctxTrend = document.getElementById('trendChart').getContext('2d');
+        new Chart(ctxTrend, {
+            type: 'bar',
+            data: {
+                labels: ['9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM'],
+                datasets: [{
+                    label: 'Predicted Wait Time (Mins)',
+                    data: [12, 28, 54, 22, 16, 38, 48, 68],
+                    backgroundColor: 'rgba(37, 99, 235, 0.45)',
+                    borderColor: '#2563eb',
+                    borderWidth: 2,
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        grid: { color: 'rgba(37, 99, 235, 0.05)' },
+                        ticks: { color: '#475569', font: { family: 'Poppins' } }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#475569', font: { family: 'Poppins' } }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    });
+</script>
+
+{% endblock %}
