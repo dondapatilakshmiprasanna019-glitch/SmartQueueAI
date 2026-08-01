@@ -1,0 +1,511 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+
+{% block title %}Bank Service Dashboard — SmartQueue AI{% endblock %}
+
+{% block content %}
+<!-- Include Three.js & Chart.js via CDNs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="dashboard-wrapper" style="max-width: 1400px; margin: 40px auto; padding: 0 20px; font-family: 'Inter', sans-serif; color: #fff;">
+    
+    <!-- 3D HERO ILLUSTRATION HEADER -->
+    <div class="service-card" style="display: flex; align-items: center; justify-content: space-between; gap: 30px; padding: 40px; margin-bottom: 40px; background: linear-gradient(135deg, rgba(0, 242, 254, 0.04) 0%, rgba(12, 18, 34, 0.85) 100%); flex-wrap: wrap;">
+        <div style="flex: 2; min-width: 300px;">
+            <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); color: #F59E0B; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; margin-bottom: 15px; text-transform: uppercase;">
+                <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #F59E0B; animation: pulse 1.5s infinite;"></span>
+                Smart Teller Allocation Active
+            </div>
+            <h1 class="text-3d" style="font-size: 2.8rem; font-weight: 900; margin-bottom: 15px; font-family: 'Poppins', sans-serif;">Banking Finance Console</h1>
+            <p style="color: var(--text-secondary); font-size: 1.05rem; line-height: 1.6; max-width: 700px;">
+                Minimize wait times and optimize branch traffic. Real-time cash deposit, loan consultation, and corporate advisor queues.
+            </p>
+        </div>
+        <div id="three-hero-container" style="flex: 1; min-width: 280px; height: 220px; position: relative; border-radius: 16px; overflow: hidden; background: rgba(6, 9, 19, 0.4); border: 1.5px solid var(--glass-border);">
+            <!-- Canvas will be appended here -->
+        </div>
+    </div>
+
+    <!-- MAIN GRID CONTAINER -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 40px;">
+        
+        <!-- COLUMN 1: SELECTORS & BOOKING -->
+        <div style="display: flex; flex-direction: column; gap: 30px;">
+            
+            <!-- step 1: select branch -->
+            <div class="service-card" style="padding: 25px;">
+                <h3 style="font-size: 1.25rem; font-weight: 800; border-bottom: 1px solid var(--glass-border); padding-bottom: 12px; margin-bottom: 18px;"><i class="fas fa-university text-cyan"></i> 1. Select Bank Branch</h3>
+                <div style="display: flex; flex-direction: column; gap: 12px;" id="bank-list">
+                    <!-- Cards populated via JS -->
+                </div>
+            </div>
+
+            <!-- step 2: choose service -->
+            <div class="service-card" style="padding: 25px;">
+                <h3 style="font-size: 1.25rem; font-weight: 800; border-bottom: 1px solid var(--glass-border); padding-bottom: 12px; margin-bottom: 18px;"><i class="fas fa-hand-holding-usd text-cyan"></i> 2. Choose Service & Teller</h3>
+                
+                <label style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 8px;">Banking Service</label>
+                <select id="service-select" class="input-box" style="width:100%; margin-bottom: 18px;">
+                    <option value="Teller Service">Cash Deposit & Withdrawal</option>
+                    <option value="Account Services">New Account Openings</option>
+                    <option value="Loans & Mortgages">Personal / Housing Loans</option>
+                    <option value="Wealth Operations">Wealth & Wealth Management</option>
+                </select>
+
+                <label style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 8px;">Target Window Desk</label>
+                <select id="desk-select" class="input-box" style="width:100%; margin-bottom: 20px;">
+                    <!-- Updated via JS -->
+                </select>
+
+                <label style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 8px;">Queue Priority</label>
+                <select id="priority-select" class="input-box" style="width:100%; margin-bottom: 25px;">
+                    <option value="Regular">Standard Customer Desk</option>
+                    <option value="Senior Citizen">Senior Citizen Priority</option>
+                    <option value="VIP">Premium Gold VIP Counter</option>
+                </select>
+
+                <button id="btn-book-ticket" class="btn-filled" style="width: 100%; padding: 14px; border-radius: 12px; font-weight: 700;">
+                    <i class="fas fa-ticket-alt"></i> Issue Queue Token
+                </button>
+            </div>
+        </div>
+
+        <!-- COLUMN 2: LIVE TELEMETRY & QUEUE STATUS -->
+        <div style="display: flex; flex-direction: column; gap: 30px;">
+            
+            <!-- Live tracking -->
+            <div class="service-card" style="padding: 25px; background: rgba(12, 18, 34, 0.95); position: relative; overflow: hidden; border-color: rgba(0,242,254,0.25);">
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, #F59E0B, var(--cyan));"></div>
+                <h3 style="font-size: 1.25rem; font-weight: 800; border-bottom: 1px solid var(--glass-border); padding-bottom: 12px; margin-bottom: 20px;"><i class="fas fa-chart-line text-cyan"></i> Live Queue Tracking</h3>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                    <div style="background: rgba(6, 9, 19, 0.6); padding: 15px; border-radius: 12px; border: 1px solid var(--glass-border);">
+                        <span style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Current Serving</span>
+                        <h4 id="live-serving-token" style="font-size: 1.8rem; color: #F59E0B; font-weight: 800; margin-top: 5px;">B-042</h4>
+                    </div>
+                    <div style="background: rgba(6, 9, 19, 0.6); padding: 15px; border-radius: 12px; border: 1px solid var(--glass-border);">
+                        <span style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Your Token</span>
+                        <h4 id="user-token-val" style="font-size: 1.8rem; color: var(--cyan); font-weight: 800; margin-top: 5px;">None</h4>
+                    </div>
+                </div>
+
+                <!-- Progress bar -->
+                <div style="margin-bottom: 25px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 8px; font-weight: 700;">
+                        <span style="color: var(--text-secondary);">Queue Load Progress</span>
+                        <span id="queue-progress-percent" style="color: var(--cyan);">45%</span>
+                    </div>
+                    <div style="height: 10px; background: rgba(0, 242, 254, 0.08); border-radius: 5px; overflow: hidden;">
+                        <div id="queue-progress-bar" style="height: 100%; width: 45%; background: linear-gradient(90deg, #F59E0B, var(--cyan)); transition: width 0.4s ease;"></div>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-secondary);"><i class="fas fa-users"></i> Customers in Queue:</span>
+                        <span id="patients-waiting-count" style="font-weight: 700;">8</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-secondary);"><i class="fas fa-stopwatch"></i> Avg Service Time:</span>
+                        <span style="font-weight: 700;">8 Mins</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0, 242, 254, 0.06); padding: 10px 15px; border-radius: 8px; border: 1px solid rgba(0, 242, 254, 0.12);">
+                        <span style="color: var(--cyan); font-weight: 700;"><i class="fas fa-brain"></i> AI Waiting Time:</span>
+                        <strong id="ai-wait-val" style="color: var(--cyan); font-size: 1.15rem;">12 Mins</strong>
+                    </div>
+                </div>
+
+                <!-- Reschedule controls -->
+                <div id="user-ticket-actions" style="display: none; gap: 10px; margin-top: 15px;">
+                    <button id="btn-cancel-ticket" class="btn-outline" style="flex: 1; padding: 10px; font-size: 0.85rem; border-color: rgba(245, 158, 11, 0.3); color: #F59E0B;">Cancel Token</button>
+                    <button id="btn-delay-ticket" class="btn-outline" style="flex: 1; padding: 10px; font-size: 0.85rem;">Delay 10m</button>
+                </div>
+            </div>
+
+            <!-- Peak hour distribution analytics -->
+            <div class="service-card" style="padding: 25px;">
+                <h3 style="font-size: 1.25rem; font-weight: 800; border-bottom: 1px solid var(--glass-border); padding-bottom: 12px; margin-bottom: 20px;"><i class="fas fa-clock text-cyan"></i> Peak Traffic Graph</h3>
+                <div style="height: 180px; position: relative;">
+                    <canvas id="bankLoadChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLUMN 3: QR TOKEN GENERATION & NOTIFICATIONS -->
+        <div style="display: flex; flex-direction: column; gap: 30px;">
+            
+            <!-- Digital ticket card -->
+            <div class="service-card" style="padding: 30px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 380px;" id="qr-ticket-box">
+                <div id="qr-placeholder" style="color: var(--text-secondary); text-align: center;">
+                    <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.35;"><i class="fas fa-qrcode"></i></div>
+                    <p style="font-size: 0.95rem; font-weight: 600;">No Active Token</p>
+                    <p style="font-size: 0.82rem; max-width: 200px; margin-top: 5px;">Configure your service parameters and issue a ticket to view the secure banking QR check-in.</p>
+                </div>
+                
+                <div id="qr-active-content" style="display: none; width: 100%;">
+                    <div style="font-size: 0.72rem; color: var(--cyan); text-transform: uppercase; font-weight: 800; letter-spacing: 1.5px; margin-bottom: 15px;">SmartQueue Secured Token</div>
+                    
+                    <!-- SVG-based dynamic high-tech QR code matrix -->
+                    <div id="qr-svg-holder" style="background: white; padding: 15px; border-radius: 16px; display: inline-block; box-shadow: 0 0 20px rgba(0, 242, 254, 0.15); margin-bottom: 20px;">
+                        <!-- Dynamically filled with vector grids -->
+                    </div>
+
+                    <h4 id="ticket-bank-name" style="font-weight: 800; color: #fff; font-size: 1.1rem; margin-bottom: 6px;">Branch Name</h4>
+                    <p id="ticket-details-summary" style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 10px;">Cashier window</p>
+                    
+                    <div style="background: rgba(0, 242, 254, 0.05); border: 1.5px dashed rgba(0, 242, 254, 0.2); border-radius: 12px; padding: 10px; font-family: monospace; font-size: 0.85rem; color: var(--cyan); font-weight: bold; margin-bottom: 15px;">
+                        TICKET: <span id="ticket-number-lbl" style="font-size: 1.25rem;">B-048</span>
+                    </div>
+
+                    <div style="font-size: 0.75rem; color: var(--text-secondary);">Show this QR code at the scanner stand in the lobby.</div>
+                </div>
+            </div>
+
+            <!-- Live notifications console -->
+            <div class="service-card" style="padding: 25px; display: flex; flex-direction: column;">
+                <h3 style="font-size: 1.25rem; font-weight: 800; border-bottom: 1px solid var(--glass-border); padding-bottom: 12px; margin-bottom: 15px;"><i class="fas fa-bell text-cyan"></i> Live Teller Dispatch</h3>
+                <div id="notifications-box" style="display: flex; flex-direction: column; gap: 10px; height: 180px; overflow-y: auto;">
+                    <!-- Notifications populated via JS -->
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- DATA AND SIMULATION JAVASCRIPT -->
+<script>
+    // State management
+    let activeBank = "Chase Central Plaza";
+    let activeService = "Teller Service";
+    let activeDesk = "Counter 1 - Fast Cash";
+    let userTicket = null;
+    let baseWaitTime = 12;
+
+    const bankData = [
+        { name: "Chase Central Plaza", address: "100 Financial Way, City Center", rating: 4.7, distance: "0.5 km", wait: 12, img: "bank" },
+        { name: "Bank of America Branch", address: "55 Wall St, Business Hub", rating: 4.5, distance: "2.1 km", wait: 8, img: "bank" },
+        { name: "Wells Fargo Retail Desk", address: "14 Broad Ave, Suburbia", rating: 4.3, distance: "4.8 km", wait: 25, img: "bank" }
+    ];
+
+    const deskData = {
+        "Teller Service": ["Counter 1 - Fast Cash", "Counter 2 - Service Desk"],
+        "Account Services": ["Desk A - Personal Bank", "Desk B - Corporate"],
+        "Loans & Mortgages": ["Office 3 - Home Loans", "Office 4 - Commercial Loans"],
+        "Wealth Operations": ["Consulting Suite Alpha", "Consulting Suite Beta"]
+    };
+
+    // Initialize lists
+    function initSelectors() {
+        const bList = document.getElementById("bank-list");
+        bList.innerHTML = "";
+        bankData.forEach((b, index) => {
+            const card = document.createElement("div");
+            card.className = "service-card";
+            card.style.padding = "15px";
+            card.style.cursor = "pointer";
+            card.style.display = "flex";
+            card.style.justifyContent = "space-between";
+            card.style.alignItems = "center";
+            card.style.border = index === 0 ? "1.5px solid var(--cyan)" : "1px solid var(--glass-border)";
+            card.style.background = index === 0 ? "rgba(0, 242, 254, 0.03)" : "transparent";
+            card.setAttribute("data-name", b.name);
+            card.setAttribute("data-wait", b.wait);
+            
+            card.innerHTML = `
+                <div>
+                    <h4 style="font-size: 1rem; font-weight: 800; color: #fff;">${b.name}</h4>
+                    <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 4px;"><i class="fas fa-map-marker-alt text-cyan"></i> ${b.address}</p>
+                </div>
+                <div style="text-align: right;">
+                    <span style="font-size: 0.8rem; color: #F59E0B; font-weight: 700;"><i class="fas fa-star"></i> ${b.rating}</span>
+                    <div style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 4px;">⏱ ~${b.wait}m wait</div>
+                </div>
+            `;
+
+            card.addEventListener("click", function() {
+                document.querySelectorAll("#bank-list .service-card").forEach(c => {
+                    c.style.borderColor = "var(--glass-border)";
+                    c.style.background = "transparent";
+                });
+                card.style.borderColor = "var(--cyan)";
+                card.style.background = "rgba(0, 242, 254, 0.03)";
+                activeBank = b.name;
+                baseWaitTime = b.wait;
+                updatePredictions();
+                addNotification(`Switched bank branch context to: ${b.name}`);
+            });
+            bList.appendChild(card);
+        });
+
+        // Setup services dropdown trigger
+        const serviceSelect = document.getElementById("service-select");
+        const deskSelect = document.getElementById("desk-select");
+
+        function updateDesks() {
+            deskSelect.innerHTML = "";
+            const desks = deskData[serviceSelect.value] || [];
+            desks.forEach(desk => {
+                const opt = document.createElement("option");
+                opt.value = desk;
+                opt.innerText = desk;
+                deskSelect.appendChild(opt);
+            });
+            activeService = serviceSelect.value;
+            activeDesk = deskSelect.value;
+            updatePredictions();
+        }
+
+        serviceSelect.addEventListener("change", updateDesks);
+        deskSelect.addEventListener("change", () => {
+            activeDesk = deskSelect.value;
+            addNotification(`Assigned counter target: ${activeDesk}`);
+        });
+
+        updateDesks();
+    }
+
+    // Update predictions values
+    function updatePredictions() {
+        const priority = document.getElementById("priority-select").value;
+        let finalWait = baseWaitTime;
+
+        if (priority === "Senior Citizen") finalWait = Math.round(finalWait * 0.5);
+        else if (priority === "VIP") finalWait = Math.round(finalWait * 0.25);
+
+        document.getElementById("ai-wait-val").innerText = `${finalWait} Mins`;
+    }
+
+    document.getElementById("priority-select").addEventListener("change", updatePredictions);
+
+    // Dynamic SVG QR code generator
+    function generateSVGMockQR(text) {
+        let size = 130;
+        let svg = `<svg width="${size}" height="${size}" viewBox="0 0 100 100" style="display:block;">`;
+        svg += `<rect x="5" y="5" width="25" height="25" fill="none" stroke="#050814" stroke-width="4"/>`;
+        svg += `<rect x="10" y="10" width="15" height="15" fill="#050814"/>`;
+        svg += `<rect x="70" y="5" width="25" height="25" fill="none" stroke="#050814" stroke-width="4"/>`;
+        svg += `<rect x="75" y="10" width="15" height="15" fill="#050814"/>`;
+        svg += `<rect x="5" y="70" width="25" height="25" fill="none" stroke="#050814" stroke-width="4"/>`;
+        svg += `<rect x="10" y="75" width="15" height="15" fill="#050814"/>`;
+        
+        for (let x = 35; x <= 65; x += 10) {
+            for (let y = 5; y <= 95; y += 10) {
+                if (Math.random() > 0.4) svg += `<rect x="${x}" y="${y}" width="6" height="6" fill="#050814" rx="1"/>`;
+            }
+        }
+        for (let x = 5; x <= 25; x += 10) {
+            for (let y = 35; y <= 65; y += 10) {
+                if (Math.random() > 0.4) svg += `<rect x="${x}" y="${y}" width="6" height="6" fill="#050814" rx="1"/>`;
+            }
+        }
+        for (let x = 70; x <= 95; x += 10) {
+            for (let y = 35; y <= 95; y += 10) {
+                if (Math.random() > 0.4) svg += `<rect x="${x}" y="${y}" width="6" height="6" fill="#050814" rx="1"/>`;
+            }
+        }
+        svg += `</svg>`;
+        return svg;
+    }
+
+    // Book Ticket Simulation
+    document.getElementById("btn-book-ticket").addEventListener("click", () => {
+        const priority = document.getElementById("priority-select").value;
+        const number = Math.floor(Math.random() * 50) + 20;
+        const tokenPrefix = priority === "VIP" ? "VIP-" : (priority === "Senior Citizen" ? "SR-" : "B-");
+        const token = `${tokenPrefix}${number.toString().padStart(3, '0')}`;
+        
+        userTicket = {
+            bank: activeBank,
+            service: activeService,
+            desk: activeDesk,
+            priority: priority,
+            token: token
+        };
+
+        // UI Updates
+        document.getElementById("user-token-val").innerText = token;
+        document.getElementById("user-token-val").style.color = "var(--cyan)";
+        document.getElementById("qr-placeholder").style.display = "none";
+        document.getElementById("qr-active-content").style.display = "block";
+        document.getElementById("user-ticket-actions").style.display = "flex";
+        
+        document.getElementById("ticket-bank-name").innerText = activeBank;
+        document.getElementById("ticket-details-summary").innerText = `${activeService} — ${activeDesk}`;
+        document.getElementById("ticket-number-lbl").innerText = token;
+        
+        // QR Code load
+        document.getElementById("qr-svg-holder").innerHTML = generateSVGMockQR(`SMARTQUEUEAI:${token}:${activeBank}`);
+
+        addNotification(`Queue token issued: ${token}`);
+        addNotification(`Assigned to ${activeDesk}`);
+        updatePredictions();
+    });
+
+    // Cancel Ticket
+    document.getElementById("btn-cancel-ticket").addEventListener("click", () => {
+        if (confirm("Are you sure you want to cancel this banking token?")) {
+            addNotification(`Token ${userTicket.token} cancelled.`);
+            userTicket = null;
+            document.getElementById("user-token-val").innerText = "None";
+            document.getElementById("qr-placeholder").style.display = "block";
+            document.getElementById("qr-active-content").style.display = "none";
+            document.getElementById("user-ticket-actions").style.display = "none";
+            updatePredictions();
+        }
+    });
+
+    // Delay 10m
+    document.getElementById("btn-delay-ticket").addEventListener("click", () => {
+        baseWaitTime += 10;
+        addNotification(`Queue updated: estimated wait delayed +10 minutes.`);
+        updatePredictions();
+    });
+
+    // Notification Logger
+    function addNotification(text) {
+        const box = document.getElementById("notifications-box");
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        
+        const item = document.createElement("div");
+        item.style.padding = "10px";
+        item.style.borderRadius = "8px";
+        item.style.background = "rgba(6, 9, 19, 0.4)";
+        item.style.borderLeft = "3px solid var(--cyan)";
+        item.style.fontSize = "0.8rem";
+        item.style.display = "flex";
+        item.style.flexDirection = "column";
+        item.style.gap = "3px";
+        item.innerHTML = `<span style="font-size:0.7rem; color:var(--text-secondary); font-weight:700;">${time}</span><span style="color:#ffffff;">${text}</span>`;
+        
+        box.prepend(item);
+    }
+
+    // Chart.js Configuration
+    function initChart() {
+        const ctx = document.getElementById('bankLoadChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['9AM', '10AM', '11AM', '12PM', '1PM', '2PM', '3PM', '4PM'],
+                datasets: [{
+                    label: 'Lobby Queue Congestion',
+                    data: [8, 12, 35, 14, 10, 24, 40, 18],
+                    backgroundColor: 'rgba(0, 242, 254, 0.05)',
+                    borderColor: '#F59E0B',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#8fa4c7' }
+                    },
+                    y: {
+                        grid: { color: 'rgba(0, 242, 254, 0.05)' },
+                        ticks: { color: '#8fa4c7' }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    }
+
+    // THREE.JS ROTATING STACK OF CYLINDER COINS
+    function initThreeJS() {
+        const container = document.getElementById("three-hero-container");
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+        camera.position.z = 7;
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(width, height);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
+
+        // Cylinder Coins Geometry
+        const coinGroup = new THREE.Group();
+        const mat = new THREE.MeshBasicMaterial({
+            color: 0xF59E0B,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.85
+        });
+
+        // 3 Stacked Coins
+        for (let i = 0; i < 3; i++) {
+            const geom = new THREE.CylinderGeometry(1.8, 1.8, 0.4, 16);
+            const mesh = new THREE.Mesh(geom, mat);
+            mesh.position.y = (i - 1) * 0.8;
+            coinGroup.add(mesh);
+        }
+
+        scene.add(coinGroup);
+
+        // Ambient particles
+        const particleCount = 40;
+        const particleGeom = new THREE.BufferGeometry();
+        const positions = [];
+        for (let i = 0; i < particleCount; i++) {
+            positions.push((Math.random() - 0.5) * 8);
+            positions.push((Math.random() - 0.5) * 8);
+            positions.push((Math.random() - 0.5) * 8);
+        }
+        particleGeom.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        const particleMat = new THREE.PointsMaterial({
+            color: 0x00f2fe,
+            size: 0.08,
+            transparent: true,
+            opacity: 0.6
+        });
+        const particles = new THREE.Points(particleGeom, particleMat);
+        scene.add(particles);
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            const w = container.clientWidth;
+            const h = container.clientHeight;
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+        });
+
+        // Animation Loop
+        let clock = new THREE.Clock();
+        function animate() {
+            requestAnimationFrame(animate);
+            const elapsedTime = clock.getElapsedTime();
+            
+            coinGroup.rotation.y = elapsedTime * 0.5;
+            coinGroup.rotation.x = 0.5 + Math.sin(elapsedTime * 1.5) * 0.15;
+
+            particles.rotation.y = -elapsedTime * 0.08;
+
+            renderer.render(scene, camera);
+        }
+        animate();
+    }
+
+    // Startup initializations
+    window.addEventListener("DOMContentLoaded", () => {
+        initSelectors();
+        initChart();
+        initThreeJS();
+        
+        addNotification("Financial services telemetry linked. AI prediction engine online.");
+        addNotification("Teller Window 2 is currently serving customer B-042.");
+    });
+</script>
+{% endblock %}

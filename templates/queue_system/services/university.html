@@ -1,0 +1,500 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+
+{% block title %}University Service Dashboard — SmartQueue AI{% endblock %}
+
+{% block content %}
+<!-- Include Three.js & Chart.js via CDNs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="dashboard-wrapper" style="max-width: 1400px; margin: 40px auto; padding: 0 20px; font-family: 'Inter', sans-serif; color: #fff;">
+    
+    <!-- 3D HERO ILLUSTRATION HEADER -->
+    <div class="service-card" style="display: flex; align-items: center; justify-content: space-between; gap: 30px; padding: 40px; margin-bottom: 40px; background: linear-gradient(135deg, rgba(0, 242, 254, 0.04) 0%, rgba(12, 18, 34, 0.85) 100%); flex-wrap: wrap;">
+        <div style="flex: 2; min-width: 300px;">
+            <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(139, 92, 246, 0.12); border: 1px solid rgba(139, 92, 246, 0.3); color: #8B5CF6; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; margin-bottom: 15px; text-transform: uppercase;">
+                <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #8B5CF6; animation: pulse 1.5s infinite;"></span>
+                Registrar Desk Optimization Active
+            </div>
+            <h1 class="text-3d" style="font-size: 2.8rem; font-weight: 900; margin-bottom: 15px; font-family: 'Poppins', sans-serif;">University Services Console</h1>
+            <p style="color: var(--text-secondary); font-size: 1.05rem; line-height: 1.6; max-width: 700px;">
+                Streamlining admissions, card printing, financial aid desk queues, and registrar services. Track student transaction queues in real time.
+            </p>
+        </div>
+        <div id="three-hero-container" style="flex: 1; min-width: 280px; height: 220px; position: relative; border-radius: 16px; overflow: hidden; background: rgba(6, 9, 19, 0.4); border: 1.5px solid var(--glass-border);">
+            <!-- Canvas will be appended here -->
+        </div>
+    </div>
+
+    <!-- MAIN GRID CONTAINER -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 40px;">
+        
+        <!-- COLUMN 1: SELECTORS & BOOKING -->
+        <div style="display: flex; flex-direction: column; gap: 30px;">
+            
+            <!-- step 1: select university -->
+            <div class="service-card" style="padding: 25px;">
+                <h3 style="font-size: 1.25rem; font-weight: 800; border-bottom: 1px solid var(--glass-border); padding-bottom: 12px; margin-bottom: 18px;"><i class="fas fa-graduation-cap text-cyan"></i> 1. Select Campus</h3>
+                <div style="display: flex; flex-direction: column; gap: 12px;" id="campus-list">
+                    <!-- Cards populated via JS -->
+                </div>
+            </div>
+
+            <!-- step 2: choose desk -->
+            <div class="service-card" style="padding: 25px;">
+                <h3 style="font-size: 1.25rem; font-weight: 800; border-bottom: 1px solid var(--glass-border); padding-bottom: 12px; margin-bottom: 18px;"><i class="fas fa-id-card text-cyan"></i> 2. Choose Desk & Helpdesk</h3>
+                
+                <label style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 8px;">Department Area</label>
+                <select id="service-select" class="input-box" style="width:100%; margin-bottom: 18px;">
+                    <option value="Admissions">Admissions & Enrolments</option>
+                    <option value="Registrar Desk">Registrar Document Desk</option>
+                    <option value="Financial Aid">Financial Aid & Scholarship</option>
+                    <option value="Student Services">Campus Card Printing</option>
+                </select>
+
+                <label style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 8px;">Available Staff Console</label>
+                <select id="desk-select" class="input-box" style="width:100%; margin-bottom: 20px;">
+                    <!-- Updated via JS -->
+                </select>
+
+                <label style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 8px;">Student Route</label>
+                <select id="priority-select" class="input-box" style="width:100%; margin-bottom: 25px;">
+                    <option value="Regular">Standard Student Line</option>
+                    <option value="Priority">Priority / Graduating Student</option>
+                </select>
+
+                <button id="btn-book-ticket" class="btn-filled" style="width: 100%; padding: 14px; border-radius: 12px; font-weight: 700;">
+                    <i class="fas fa-ticket-alt"></i> Generate Digital Token
+                </button>
+            </div>
+        </div>
+
+        <!-- COLUMN 2: LIVE TELEMETRY & QUEUE STATUS -->
+        <div style="display: flex; flex-direction: column; gap: 30px;">
+            
+            <!-- Live tracking -->
+            <div class="service-card" style="padding: 25px; background: rgba(12, 18, 34, 0.95); position: relative; overflow: hidden; border-color: rgba(0,242,254,0.25);">
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, #8B5CF6, var(--cyan));"></div>
+                <h3 style="font-size: 1.25rem; font-weight: 800; border-bottom: 1px solid var(--glass-border); padding-bottom: 12px; margin-bottom: 20px;"><i class="fas fa-chart-line text-cyan"></i> Live Queue Tracking</h3>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                    <div style="background: rgba(6, 9, 19, 0.6); padding: 15px; border-radius: 12px; border: 1px solid var(--glass-border);">
+                        <span style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Current Serving</span>
+                        <h4 id="live-serving-token" style="font-size: 1.8rem; color: #8B5CF6; font-weight: 800; margin-top: 5px;">U-018</h4>
+                    </div>
+                    <div style="background: rgba(6, 9, 19, 0.6); padding: 15px; border-radius: 12px; border: 1px solid var(--glass-border);">
+                        <span style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Your Token</span>
+                        <h4 id="user-token-val" style="font-size: 1.8rem; color: var(--cyan); font-weight: 800; margin-top: 5px;">None</h4>
+                    </div>
+                </div>
+
+                <!-- Progress bar -->
+                <div style="margin-bottom: 25px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 8px; font-weight: 700;">
+                        <span style="color: var(--text-secondary);">Queue Load Progress</span>
+                        <span id="queue-progress-percent" style="color: var(--cyan);">60%</span>
+                    </div>
+                    <div style="height: 10px; background: rgba(0, 242, 254, 0.08); border-radius: 5px; overflow: hidden;">
+                        <div id="queue-progress-bar" style="height: 100%; width: 60%; background: linear-gradient(90deg, #8B5CF6, var(--cyan)); transition: width 0.4s ease;"></div>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-secondary);"><i class="fas fa-users"></i> Students Waiting:</span>
+                        <span id="patients-waiting-count" style="font-weight: 700;">11</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-secondary);"><i class="fas fa-stopwatch"></i> Avg Service Time:</span>
+                        <span style="font-weight: 700;">12 Mins</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0, 242, 254, 0.06); padding: 10px 15px; border-radius: 8px; border: 1px solid rgba(0, 242, 254, 0.12);">
+                        <span style="color: var(--cyan); font-weight: 700;"><i class="fas fa-brain"></i> AI Waiting Time:</span>
+                        <strong id="ai-wait-val" style="color: var(--cyan); font-size: 1.15rem;">18 Mins</strong>
+                    </div>
+                </div>
+
+                <!-- Reschedule controls -->
+                <div id="user-ticket-actions" style="display: none; gap: 10px; margin-top: 15px;">
+                    <button id="btn-cancel-ticket" class="btn-outline" style="flex: 1; padding: 10px; font-size: 0.85rem; border-color: rgba(139, 92, 246, 0.3); color: #8B5CF6;">Cancel Ticket</button>
+                    <button id="btn-delay-ticket" class="btn-outline" style="flex: 1; padding: 10px; font-size: 0.85rem;">Delay 10m</button>
+                </div>
+            </div>
+
+            <!-- Peak hour distribution analytics -->
+            <div class="service-card" style="padding: 25px;">
+                <h3 style="font-size: 1.25rem; font-weight: 800; border-bottom: 1px solid var(--glass-border); padding-bottom: 12px; margin-bottom: 20px;"><i class="fas fa-clock text-cyan"></i> Helpdesk Traffic Hourly</h3>
+                <div style="height: 180px; position: relative;">
+                    <canvas id="uniLoadChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLUMN 3: QR TOKEN GENERATION & NOTIFICATIONS -->
+        <div style="display: flex; flex-direction: column; gap: 30px;">
+            
+            <!-- Digital ticket card -->
+            <div class="service-card" style="padding: 30px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 380px;" id="qr-ticket-box">
+                <div id="qr-placeholder" style="color: var(--text-secondary); text-align: center;">
+                    <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.35;"><i class="fas fa-qrcode"></i></div>
+                    <p style="font-size: 0.95rem; font-weight: 600;">No Active Token</p>
+                    <p style="font-size: 0.82rem; max-width: 200px; margin-top: 5px;">Configure your department choices to generate your digital student check-in ticket.</p>
+                </div>
+                
+                <div id="qr-active-content" style="display: none; width: 100%;">
+                    <div style="font-size: 0.72rem; color: var(--cyan); text-transform: uppercase; font-weight: 800; letter-spacing: 1.5px; margin-bottom: 15px;">SmartQueue Secured Token</div>
+                    
+                    <!-- SVG-based dynamic high-tech QR code matrix -->
+                    <div id="qr-svg-holder" style="background: white; padding: 15px; border-radius: 16px; display: inline-block; box-shadow: 0 0 20px rgba(0, 242, 254, 0.15); margin-bottom: 20px;">
+                        <!-- Dynamically filled with vector grids -->
+                    </div>
+
+                    <h4 id="ticket-uni-name" style="font-weight: 800; color: #fff; font-size: 1.1rem; margin-bottom: 6px;">Campus Name</h4>
+                    <p id="ticket-details-summary" style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 10px;">Desk Name</p>
+                    
+                    <div style="background: rgba(0, 242, 254, 0.05); border: 1.5px dashed rgba(0, 242, 254, 0.2); border-radius: 12px; padding: 10px; font-family: monospace; font-size: 0.85rem; color: var(--cyan); font-weight: bold; margin-bottom: 15px;">
+                        STUDENT TICKET: <span id="ticket-number-lbl" style="font-size: 1.25rem;">U-024</span>
+                    </div>
+
+                    <div style="font-size: 0.75rem; color: var(--text-secondary);">Show this QR code at the service counter to scan.</div>
+                </div>
+            </div>
+
+            <!-- Live notifications console -->
+            <div class="service-card" style="padding: 25px; display: flex; flex-direction: column;">
+                <h3 style="font-size: 1.25rem; font-weight: 800; border-bottom: 1px solid var(--glass-border); padding-bottom: 12px; margin-bottom: 15px;"><i class="fas fa-bell text-cyan"></i> Live Registrar Dispatch</h3>
+                <div id="notifications-box" style="display: flex; flex-direction: column; gap: 10px; height: 180px; overflow-y: auto;">
+                    <!-- Notifications populated via JS -->
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- DATA AND SIMULATION JAVASCRIPT -->
+<script>
+    // State management
+    let activeCampus = "Metro State University";
+    let activeService = "Admissions";
+    let activeDesk = "Admissions Helpdesk 1";
+    let userTicket = null;
+    let baseWaitTime = 18;
+
+    const campusData = [
+        { name: "Metro State University", address: "500 Education Ave, University City", rating: 4.8, distance: "0.8 km", wait: 18, img: "university" },
+        { name: "Heights Academic Institute", address: "12 Campus Blvd, North Heights", rating: 4.6, distance: "2.5 km", wait: 12, img: "university" }
+    ];
+
+    const deskData = {
+        "Admissions": ["Admissions Helpdesk 1", "Registrar Desk 2"],
+        "Registrar Desk": ["Registrar Document Desk 1", "Registrar Document Desk 2"],
+        "Financial Aid": ["Financial Aid Desk A", "Dean of Students Aid"],
+        "Student Services": ["Student ID Printing Counter", "General Staff Counter"]
+    };
+
+    // Initialize lists
+    function initSelectors() {
+        const cList = document.getElementById("campus-list");
+        cList.innerHTML = "";
+        campusData.forEach((c, index) => {
+            const card = document.createElement("div");
+            card.className = "service-card";
+            card.style.padding = "15px";
+            card.style.cursor = "pointer";
+            card.style.display = "flex";
+            card.style.justifyContent = "space-between";
+            card.style.alignItems = "center";
+            card.style.border = index === 0 ? "1.5px solid var(--cyan)" : "1px solid var(--glass-border)";
+            card.style.background = index === 0 ? "rgba(0, 242, 254, 0.03)" : "transparent";
+            card.setAttribute("data-name", c.name);
+            card.setAttribute("data-wait", c.wait);
+            
+            card.innerHTML = `
+                <div>
+                    <h4 style="font-size: 1rem; font-weight: 800; color: #fff;">${c.name}</h4>
+                    <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 4px;"><i class="fas fa-map-marker-alt text-cyan"></i> ${c.address}</p>
+                </div>
+                <div style="text-align: right;">
+                    <span style="font-size: 0.8rem; color: #F59E0B; font-weight: 700;"><i class="fas fa-star"></i> ${c.rating}</span>
+                    <div style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 4px;">⏱ ~${c.wait}m wait</div>
+                </div>
+            `;
+
+            card.addEventListener("click", function() {
+                document.querySelectorAll("#campus-list .service-card").forEach(crd => {
+                    crd.style.borderColor = "var(--glass-border)";
+                    crd.style.background = "transparent";
+                });
+                card.style.borderColor = "var(--cyan)";
+                card.style.background = "rgba(0, 242, 254, 0.03)";
+                activeCampus = c.name;
+                baseWaitTime = c.wait;
+                updatePredictions();
+                addNotification(`Switched campus context to: ${c.name}`);
+            });
+            cList.appendChild(card);
+        });
+
+        // Setup services dropdown trigger
+        const serviceSelect = document.getElementById("service-select");
+        const deskSelect = document.getElementById("desk-select");
+
+        function updateDesks() {
+            deskSelect.innerHTML = "";
+            const desks = deskData[serviceSelect.value] || [];
+            desks.forEach(desk => {
+                const opt = document.createElement("option");
+                opt.value = desk;
+                opt.innerText = desk;
+                deskSelect.appendChild(opt);
+            });
+            activeService = serviceSelect.value;
+            activeDesk = deskSelect.value;
+            updatePredictions();
+        }
+
+        serviceSelect.addEventListener("change", updateDesks);
+        deskSelect.addEventListener("change", () => {
+            activeDesk = deskSelect.value;
+            addNotification(`Assigned counter target: ${activeDesk}`);
+        });
+
+        updateDesks();
+    }
+
+    // Update predictions values
+    function updatePredictions() {
+        const priority = document.getElementById("priority-select").value;
+        let finalWait = baseWaitTime;
+
+        if (priority === "Priority") finalWait = Math.round(finalWait * 0.4);
+
+        document.getElementById("ai-wait-val").innerText = `${finalWait} Mins`;
+    }
+
+    document.getElementById("priority-select").addEventListener("change", updatePredictions);
+
+    // Dynamic SVG QR code generator
+    function generateSVGMockQR(text) {
+        let size = 130;
+        let svg = `<svg width="${size}" height="${size}" viewBox="0 0 100 100" style="display:block;">`;
+        svg += `<rect x="5" y="5" width="25" height="25" fill="none" stroke="#050814" stroke-width="4"/>`;
+        svg += `<rect x="10" y="10" width="15" height="15" fill="#050814"/>`;
+        svg += `<rect x="70" y="5" width="25" height="25" fill="none" stroke="#050814" stroke-width="4"/>`;
+        svg += `<rect x="75" y="10" width="15" height="15" fill="#050814"/>`;
+        svg += `<rect x="5" y="70" width="25" height="25" fill="none" stroke="#050814" stroke-width="4"/>`;
+        svg += `<rect x="10" y="75" width="15" height="15" fill="#050814"/>`;
+        
+        for (let x = 35; x <= 65; x += 10) {
+            for (let y = 5; y <= 95; y += 10) {
+                if (Math.random() > 0.4) svg += `<rect x="${x}" y="${y}" width="6" height="6" fill="#050814" rx="1"/>`;
+            }
+        }
+        for (let x = 5; x <= 25; x += 10) {
+            for (let y = 35; y <= 65; y += 10) {
+                if (Math.random() > 0.4) svg += `<rect x="${x}" y="${y}" width="6" height="6" fill="#050814" rx="1"/>`;
+            }
+        }
+        for (let x = 70; x <= 95; x += 10) {
+            for (let y = 35; y <= 95; y += 10) {
+                if (Math.random() > 0.4) svg += `<rect x="${x}" y="${y}" width="6" height="6" fill="#050814" rx="1"/>`;
+            }
+        }
+        svg += `</svg>`;
+        return svg;
+    }
+
+    // Book Ticket Simulation
+    document.getElementById("btn-book-ticket").addEventListener("click", () => {
+        const priority = document.getElementById("priority-select").value;
+        const number = Math.floor(Math.random() * 60) + 10;
+        const tokenPrefix = priority === "Priority" ? "PR-" : "U-";
+        const token = `${tokenPrefix}${number.toString().padStart(3, '0')}`;
+        
+        userTicket = {
+            uni: activeCampus,
+            service: activeService,
+            desk: activeDesk,
+            priority: priority,
+            token: token
+        };
+
+        // UI Updates
+        document.getElementById("user-token-val").innerText = token;
+        document.getElementById("user-token-val").style.color = "var(--cyan)";
+        document.getElementById("qr-placeholder").style.display = "none";
+        document.getElementById("qr-active-content").style.display = "block";
+        document.getElementById("user-ticket-actions").style.display = "flex";
+        
+        document.getElementById("ticket-uni-name").innerText = activeCampus;
+        document.getElementById("ticket-details-summary").innerText = `${activeService} — ${activeDesk}`;
+        document.getElementById("ticket-number-lbl").innerText = token;
+        
+        // QR Code load
+        document.getElementById("qr-svg-holder").innerHTML = generateSVGMockQR(`SMARTQUEUEAI:${token}:${activeCampus}`);
+
+        addNotification(`Student token created: ${token}`);
+        addNotification(`Queue initialized for ${activeDesk}`);
+        updatePredictions();
+    });
+
+    // Cancel Ticket
+    document.getElementById("btn-cancel-ticket").addEventListener("click", () => {
+        if (confirm("Are you sure you want to cancel this student ticket?")) {
+            addNotification(`Token ${userTicket.token} cancelled.`);
+            userTicket = null;
+            document.getElementById("user-token-val").innerText = "None";
+            document.getElementById("qr-placeholder").style.display = "block";
+            document.getElementById("qr-active-content").style.display = "none";
+            document.getElementById("user-ticket-actions").style.display = "none";
+            updatePredictions();
+        }
+    });
+
+    // Delay 10m
+    document.getElementById("btn-delay-ticket").addEventListener("click", () => {
+        baseWaitTime += 10;
+        addNotification(`Student line updated: estimated wait delayed +10 minutes.`);
+        updatePredictions();
+    });
+
+    // Notification Logger
+    function addNotification(text) {
+        const box = document.getElementById("notifications-box");
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        
+        const item = document.createElement("div");
+        item.style.padding = "10px";
+        item.style.borderRadius = "8px";
+        item.style.background = "rgba(6, 9, 19, 0.4)";
+        item.style.borderLeft = "3px solid var(--cyan)";
+        item.style.fontSize = "0.8rem";
+        item.style.display = "flex";
+        item.style.flexDirection = "column";
+        item.style.gap = "3px";
+        item.innerHTML = `<span style="font-size:0.7rem; color:var(--text-secondary); font-weight:700;">${time}</span><span style="color:#ffffff;">${text}</span>`;
+        
+        box.prepend(item);
+    }
+
+    // Chart.js Configuration
+    function initChart() {
+        const ctx = document.getElementById('uniLoadChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['9AM', '10AM', '11AM', '12PM', '1PM', '2PM', '3PM', '4PM'],
+                datasets: [{
+                    label: 'Registrar Helpdesk Load',
+                    data: [20, 45, 60, 30, 15, 38, 50, 75],
+                    backgroundColor: 'rgba(139, 92, 246, 0.4)',
+                    borderColor: '#8B5CF6',
+                    borderWidth: 2,
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#8fa4c7' }
+                    },
+                    y: {
+                        grid: { color: 'rgba(0, 242, 254, 0.05)' },
+                        ticks: { color: '#8fa4c7' }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    }
+
+    // THREE.JS SPINNING ATOMIC ORBIT LINES
+    function initThreeJS() {
+        const container = document.getElementById("three-hero-container");
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+        camera.position.z = 8;
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(width, height);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
+
+        // Atomic Orbit Geometry
+        const atomGroup = new THREE.Group();
+        
+        const mat = new THREE.MeshBasicMaterial({
+            color: 0x8B5CF6,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.7
+        });
+
+        // Core Nucleus
+        const coreGeom = new THREE.SphereGeometry(1.0, 8, 8);
+        const coreMesh = new THREE.Mesh(coreGeom, mat);
+        atomGroup.add(coreMesh);
+
+        // 3 Orbit Lines
+        const lineCount = 3;
+        for (let i = 0; i < lineCount; i++) {
+            const orbitGeom = new THREE.TorusGeometry(2.4, 0.03, 8, 48);
+            const orbitMesh = new THREE.Mesh(orbitGeom, new THREE.MeshBasicMaterial({
+                color: i === 0 ? 0x00f2fe : 0x8B5CF6,
+                transparent: true,
+                opacity: 0.6
+            }));
+            
+            // Distribute angles
+            orbitMesh.rotation.x = Math.PI / 2;
+            orbitMesh.rotation.y = (i * Math.PI) / lineCount;
+            atomGroup.add(orbitMesh);
+        }
+
+        scene.add(atomGroup);
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            const w = container.clientWidth;
+            const h = container.clientHeight;
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+        });
+
+        // Animation Loop
+        let clock = new THREE.Clock();
+        function animate() {
+            requestAnimationFrame(animate);
+            const elapsedTime = clock.getElapsedTime();
+            
+            atomGroup.rotation.y = elapsedTime * 0.45;
+            atomGroup.rotation.x = elapsedTime * 0.2;
+
+            renderer.render(scene, camera);
+        }
+        animate();
+    }
+
+    // Startup initializations
+    window.addEventListener("DOMContentLoaded", () => {
+        initSelectors();
+        initChart();
+        initThreeJS();
+        
+        addNotification("Campus queuing systems successfully synced. Triage active.");
+        addNotification("Dean of Students counter is currently serving student U-018.");
+    });
+</script>
+{% endblock %}

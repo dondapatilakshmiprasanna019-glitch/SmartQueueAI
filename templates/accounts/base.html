@@ -23,6 +23,16 @@
             <a href="{% url 'home' %}" class="nav-logo">SmartQueue<span>AI</span></a>
             <ul class="nav-links">
                 <li><a href="{% url 'home' %}">Home</a></li>
+                <li class="dropdown">
+                    <a href="{% url 'home' %}#services" class="dropdown-toggle" style="cursor: pointer; display: flex; align-items: center; gap: 5px;">Services <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'hospital_service' %}"><i class="fas fa-hospital text-cyan" style="margin-right: 10px; width: 16px; text-align: center;"></i> Hospital Dashboard</a></li>
+                        <li><a href="{% url 'bank_service' %}"><i class="fas fa-university text-cyan" style="margin-right: 10px; width: 16px; text-align: center;"></i> Bank Dashboard</a></li>
+                        <li><a href="{% url 'university_service' %}"><i class="fas fa-graduation-cap text-cyan" style="margin-right: 10px; width: 16px; text-align: center;"></i> University Dashboard</a></li>
+                        <li><a href="{% url 'government_service' %}"><i class="fas fa-gavel text-cyan" style="margin-right: 10px; width: 16px; text-align: center;"></i> Government Dashboard</a></li>
+                        <li><a href="{% url 'service_center_service' %}"><i class="fas fa-concierge-bell text-cyan" style="margin-right: 10px; width: 16px; text-align: center;"></i> Service Center Dashboard</a></li>
+                    </ul>
+                </li>
                 <li><a href="{% url 'ml_playground' %}">AI Playground</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
@@ -32,7 +42,6 @@
                     {% endif %}
                     <li><a href="{% url 'logout' %}" class="btn-outline">Logout</a></li>
                 {% else %}
-                    <li><a href="{% url 'home' %}#services">Services</a></li>
                     <li><a href="{% url 'home' %}#why">Why Us</a></li>
                     <li><a href="{% url 'login' %}" class="btn-outline">Login</a></li>
                     <li><a href="{% url 'register' %}" class="btn-filled">Sign Up</a></li>

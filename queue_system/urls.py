@@ -10,4 +10,9 @@ urlpatterns = [
     path('cancel-booking/<int:appointment_id>/', views.cancel_booking_view, name='cancel_booking'),
     path('delay-booking/<int:appointment_id>/', views.delay_booking_view, name='delay_booking'),
     path('ml-playground/', views.ml_playground_view, name='ml_playground'),
+    path('services/hospital/', views.hospital_service_view, name='hospital_service'),
+    path('services/bank/', views.bank_service_view, name='bank_service'),
+    path('services/university/', views.university_service_view, name='university_service'),
+    path('services/government/', views.government_service_view, name='government_service'),
+    path('services/service-center/', views.service_center_service_view, name='service_center_service'),
 ]

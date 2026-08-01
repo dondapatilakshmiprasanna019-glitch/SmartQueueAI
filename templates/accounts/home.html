@@ -89,53 +89,53 @@
     <h2>AI-Powered SaaS Features</h2>
     <div class="why-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 35px; max-width: 1200px; margin: 0 auto;">
         
-        <a href="{% url 'dashboard' %}" class="why-item" style="display: block; cursor: pointer; text-decoration: none; color: inherit;">
+        <div class="why-item" style="display: block; cursor: pointer; text-decoration: none; color: inherit;" onclick="openShowcaseModal('ai-wait')">
             <div style="font-size: 2rem; color: var(--cyan); margin-bottom: 15px;"><i class="fas fa-clock"></i></div>
             <h4 style="font-size: 1.15rem; margin-bottom: 10px;">AI Waiting Time Prediction</h4>
             <p>Uses trained Random Forest models to predict wait times depending on load variables, time of day, and priority classifications.</p>
-        </a>
+        </div>
         
-        <a href="{% url 'book' %}" class="why-item" style="display: block; cursor: pointer; text-decoration: none; color: inherit;">
+        <div class="why-item" style="display: block; cursor: pointer; text-decoration: none; color: inherit;" onclick="openShowcaseModal('book-app')">
             <div style="font-size: 2rem; color: var(--cyan); margin-bottom: 15px;"><i class="fas fa-calendar-alt"></i></div>
             <h4 style="font-size: 1.15rem; margin-bottom: 10px;">Online Appointment Booking</h4>
             <p>Sleek and unified booking screens that autofill recommendations and prevent calendar conflicts.</p>
-        </a>
-        
-        <a href="{% url 'dashboard' %}" class="why-item" style="display: block; cursor: pointer; text-decoration: none; color: inherit;">
-            <div style="font-size: 2rem; color: var(--cyan); margin-bottom: 15px;"><i class="fas fa-road"></i></div>
+        </div>
+
+        <div class="why-item" style="display: block; cursor: pointer; text-decoration: none; color: inherit;" onclick="openShowcaseModal('live-track')">
+            <div style="font-size: 2rem; color: var(--cyan); margin-bottom: 15px;"><i class="fas fa-stream"></i></div>
             <h4 style="font-size: 1.15rem; margin-bottom: 10px;">Live Queue Tracking</h4>
             <p>Real-time queue tracking dashboard with progress bars displaying current serving tokens and active users.</p>
-        </a>
+        </div>
 
-        <a href="{% url 'dashboard' %}" class="why-item" style="display: block; cursor: pointer; text-decoration: none; color: inherit;">
+        <div class="why-item" style="display: block; cursor: pointer; text-decoration: none; color: inherit;" onclick="openShowcaseModal('qr-token')">
             <div style="font-size: 2rem; color: var(--cyan); margin-bottom: 15px;"><i class="fas fa-qrcode"></i></div>
             <h4 style="font-size: 1.15rem; margin-bottom: 10px;">QR Code Token</h4>
             <p>Automatic generation of secure, scannable QR tokens representing your place in the wait queue.</p>
-        </a>
+        </div>
 
-        <a href="{% url 'dashboard' %}" class="why-item" style="display: block; cursor: pointer; text-decoration: none; color: inherit;">
-            <div style="font-size: 2rem; color: var(--cyan); margin-bottom: 15px;"><i class="fas fa-bell"></i></div>
+        <div class="why-item" style="display: block; cursor: pointer; text-decoration: none; color: inherit;" onclick="openShowcaseModal('sms-notif')">
+            <div style="font-size: 2rem; color: var(--cyan); margin-bottom: 15px;"><i class="fas fa-sms"></i></div>
             <h4 style="font-size: 1.15rem; margin-bottom: 10px;">Notifications</h4>
             <p>Receive immediate in-app and SMS alerts when your token is generated, called, or delayed.</p>
-        </a>
+        </div>
 
-        <a href="{% url 'dashboard' %}" class="why-item" style="display: block; cursor: pointer; text-decoration: none; color: inherit;">
+        <div class="why-item" style="display: block; cursor: pointer; text-decoration: none; color: inherit;" onclick="openShowcaseModal('smart-dash')">
             <div style="font-size: 2rem; color: var(--cyan); margin-bottom: 15px;"><i class="fas fa-tachometer-alt"></i></div>
             <h4 style="font-size: 1.15rem; margin-bottom: 10px;">Smart Dashboard</h4>
             <p>Interactive dashboard console for tracking upcoming, completed, and canceled tickets.</p>
-        </a>
+        </div>
 
-        <a href="{% url 'register' %}" class="why-item" style="display: block; cursor: pointer; text-decoration: none; color: inherit;">
+        <div class="why-item" style="display: block; cursor: pointer; text-decoration: none; color: inherit;" onclick="openShowcaseModal('sec-auth')">
             <div style="font-size: 2rem; color: var(--cyan); margin-bottom: 15px;"><i class="fas fa-shield-alt"></i></div>
             <h4 style="font-size: 1.15rem; margin-bottom: 10px;">Secure Authentication</h4>
             <p>Role-based authentication models verifying Admin, Staff, and Customer privileges.</p>
-        </a>
+        </div>
 
-        <a href="{% url 'dashboard' %}" class="why-item" style="display: block; cursor: pointer; text-decoration: none; color: inherit;">
+        <div class="why-item" style="display: block; cursor: pointer; text-decoration: none; color: inherit;" onclick="openShowcaseModal('analytics-stat')">
             <div style="font-size: 2rem; color: var(--cyan); margin-bottom: 15px;"><i class="fas fa-chart-pie"></i></div>
             <h4 style="font-size: 1.15rem; margin-bottom: 10px;">Analytics</h4>
             <p>Complete statistical charts highlighting average wait time distributions and service speeds.</p>
-        </a>
+        </div>
     </div>
 </section>
 
@@ -144,31 +144,31 @@
     <h2>Our Service Verticals</h2>
     <div class="service-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 35px; max-width: 1200px; margin: 0 auto;">
         
-        <a href="{% url 'book' %}?service=Hospital" class="service-card" style="text-align: center; display: block; text-decoration: none; color: inherit; cursor: pointer;">
+        <a href="{% url 'hospital_service' %}" class="service-card" style="text-align: center; display: block; text-decoration: none; color: inherit; cursor: pointer;">
             <div style="font-size: 2.2rem; color: var(--cyan); margin-bottom: 15px;"><i class="fas fa-hospital"></i></div>
             <h3>Hospitals</h3>
             <p>Manage emergency triage, outpatient traffic, and physician appointments seamlessly.</p>
         </a>
         
-        <a href="{% url 'book' %}?service=Bank" class="service-card" style="text-align: center; display: block; text-decoration: none; color: inherit; cursor: pointer;">
+        <a href="{% url 'bank_service' %}" class="service-card" style="text-align: center; display: block; text-decoration: none; color: inherit; cursor: pointer;">
             <div style="font-size: 2.2rem; color: var(--cyan); margin-bottom: 15px;"><i class="fas fa-university"></i></div>
             <h3>Banks</h3>
             <p>Ensure priority service routing and minimal transaction queue congestion.</p>
         </a>
         
-        <a href="{% url 'book' %}?service=University" class="service-card" style="text-align: center; display: block; text-decoration: none; color: inherit; cursor: pointer;">
+        <a href="{% url 'university_service' %}" class="service-card" style="text-align: center; display: block; text-decoration: none; color: inherit; cursor: pointer;">
             <div style="font-size: 2.2rem; color: var(--cyan); margin-bottom: 15px;"><i class="fas fa-graduation-cap"></i></div>
             <h3>Universities</h3>
             <p>Optimize admissions queues, registrar document pickups, and advising sessions.</p>
         </a>
 
-        <a href="{% url 'book' %}?service=Government" class="service-card" style="text-align: center; display: block; text-decoration: none; color: inherit; cursor: pointer;">
+        <a href="{% url 'government_service' %}" class="service-card" style="text-align: center; display: block; text-decoration: none; color: inherit; cursor: pointer;">
             <div style="font-size: 2.2rem; color: var(--cyan); margin-bottom: 15px;"><i class="fas fa-gavel"></i></div>
             <h3>Government Offices</h3>
             <p>Manage municipal requests, passport declarations, and document signatures efficiently.</p>
         </a>
 
-        <a href="{% url 'book' %}?service=Service Center" class="service-card" style="text-align: center; display: block; text-decoration: none; color: inherit; cursor: pointer;">
+        <a href="{% url 'service_center_service' %}" class="service-card" style="text-align: center; display: block; text-decoration: none; color: inherit; cursor: pointer;">
             <div style="font-size: 2.2rem; color: var(--cyan); margin-bottom: 15px;"><i class="fas fa-concierge-bell"></i></div>
             <h3>Service Centers</h3>
             <p>Optimize tech assistance waitlists and dynamic diagnostic queue sequences.</p>
@@ -373,5 +373,441 @@
         }
     }
 </style>
+
+<!-- SaaS FEATURE SHOWCASE MODAL -->
+<div id="showcaseModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 8, 20, 0.85); backdrop-filter: blur(15px); z-index: 20000; align-items: center; justify-content: center; padding: 20px; transition: all 0.3s ease;">
+    <div class="service-card" style="width: 100%; max-width: 800px; padding: 35px; border-color: rgba(0, 242, 254, 0.35); background: rgba(12, 18, 34, 0.98); box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(0, 242, 254, 0.2); position: relative; max-height: 90vh; overflow-y: auto;">
+        
+        <!-- Close button -->
+        <button onclick="closeShowcaseModal()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer; transition: color 0.2s;"><i class="fas fa-times"></i></button>
+        
+        <!-- Header -->
+        <div style="display: flex; align-items: center; gap: 15px; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; margin-bottom: 25px;">
+            <div id="modal-icon" style="font-size: 2.2rem; color: var(--cyan);"></div>
+            <div>
+                <h3 id="modal-title" style="font-size: 1.5rem; font-weight: 900; color: #fff; font-family: 'Poppins', sans-serif;">Feature Title</h3>
+                <p id="modal-subtitle" style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 3px;">Dynamic Interactive Simulation Console</p>
+            </div>
+        </div>
+
+        <!-- Dynamic Body Content -->
+        <div id="modal-simulator-body" style="color: #fff; min-height: 250px;">
+            <!-- Injected via JavaScript -->
+        </div>
+
+    </div>
+</div>
+
+<script>
+    let localChartInstance = null;
+
+    function closeShowcaseModal() {
+        document.getElementById("showcaseModal").style.display = "none";
+        if (localChartInstance) {
+            localChartInstance.destroy();
+            localChartInstance = null;
+        }
+    }
+
+    // Modal click handler mapping
+    function openShowcaseModal(featureId) {
+        const modal = document.getElementById("showcaseModal");
+        const modalIcon = document.getElementById("modal-icon");
+        const modalTitle = document.getElementById("modal-title");
+        const body = document.getElementById("modal-simulator-body");
+
+        modal.style.display = "flex";
+        body.innerHTML = ""; // reset
+
+        // Mock SVG QR Code
+        function getSVGQR(text) {
+            return `<svg width="120" height="120" viewBox="0 0 100 100" style="display:block; background:#fff; padding:8px; border-radius:10px;"><rect x="5" y="5" width="20" height="20" fill="none" stroke="#050814" stroke-width="4"/><rect x="9" y="9" width="12" height="12" fill="#050814"/><rect x="75" y="5" width="20" height="20" fill="none" stroke="#050814" stroke-width="4"/><rect x="79" y="9" width="12" height="12" fill="#050814"/><rect x="5" y="75" width="20" height="20" fill="none" stroke="#050814" stroke-width="4"/><rect x="9" y="79" width="12" height="12" fill="#050814"/><rect x="35" y="35" width="10" height="10" fill="#050814"/><rect x="55" y="45" width="15" height="15" fill="#050814"/><rect x="35" y="75" width="15" height="8" fill="#050814"/></svg>`;
+        }
+
+        if (featureId === 'ai-wait') {
+            modalIcon.innerHTML = `<i class="fas fa-clock"></i>`;
+            modalTitle.innerText = "AI Waiting Time Predictor";
+            body.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">Drag the sliders to simulate how our Random Forest machine learning models compute estimated wait times in real time.</p>
+                    <div style="background: rgba(6, 9, 19, 0.5); padding: 25px; border-radius: 16px; border: 1px solid var(--glass-border);">
+                        <div style="margin-bottom: 20px;">
+                            <label style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:700; margin-bottom:8px;">
+                                <span>People Ahead in Line</span>
+                                <span id="lbl-ahead" style="color:var(--cyan);">15 People</span>
+                            </label>
+                            <input type="range" id="sim-ahead" min="1" max="50" value="15" style="width: 100%; accent-color: var(--cyan);">
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label style="font-size:0.85rem; font-weight:700; display:block; margin-bottom:8px;">AI Triage Status Priority</label>
+                            <select id="sim-triage" class="input-box" style="width: 100%;">
+                                <option value="Regular">Regular Outpatient Queue</option>
+                                <option value="Senior">Senior Citizen / Elder Priority</option>
+                                <option value="VIP">VIP Client Privilege</option>
+                            </select>
+                        </div>
+                        <div style="text-align: center; background: rgba(0, 242, 254, 0.05); padding: 15px; border-radius: 12px; border: 1px dashed rgba(0,242,254,0.25);">
+                            <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Predicted Wait Duration</span>
+                            <h3 id="calc-wait-time" style="font-size: 2.2rem; color: var(--cyan); font-weight: 900; margin-top: 5px; text-shadow: 0 0 10px rgba(0,242,254,0.3);">120 Mins</h3>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const inputAhead = document.getElementById("sim-ahead");
+            const inputTriage = document.getElementById("sim-triage");
+            const outputWait = document.getElementById("calc-wait-time");
+            const lblAhead = document.getElementById("lbl-ahead");
+
+            function recalculate() {
+                const ahead = parseInt(inputAhead.value);
+                const triage = inputTriage.value;
+                lblAhead.innerText = `${ahead} People`;
+                let factor = 8;
+                if (triage === 'Senior') factor = 4;
+                if (triage === 'VIP') factor = 2;
+                outputWait.innerText = `${ahead * factor} Mins`;
+            }
+            inputAhead.addEventListener("input", recalculate);
+            inputTriage.addEventListener("change", recalculate);
+            recalculate();
+
+        } else if (featureId === 'book-app') {
+            modalIcon.innerHTML = `<i class="fas fa-calendar-alt"></i>`;
+            modalTitle.innerText = "Online Appointment Booking";
+            body.innerHTML = `
+                <div id="booking-wizard-step" style="display: flex; flex-direction: column; gap: 20px;">
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">Configure your preferences to book a simulated ticket immediately.</p>
+                    <div style="background: rgba(6, 9, 19, 0.5); padding: 25px; border-radius: 16px; border: 1px solid var(--glass-border); display: flex; flex-direction: column; gap: 15px;">
+                        <div>
+                            <label style="font-size:0.85rem; font-weight:700; display:block; margin-bottom:8px;">Target Service Sector</label>
+                            <select id="book-sector" class="input-box" style="width:100%;">
+                                <option value="Hospitals">Hospitals & Clinics</option>
+                                <option value="Banks">Banking Branches</option>
+                                <option value="Government">Government Offices</option>
+                            </select>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div>
+                                <label style="font-size:0.85rem; font-weight:700; display:block; margin-bottom:8px;">Date</label>
+                                <input type="date" class="input-box" style="width:100%;" value="2026-08-01">
+                            </div>
+                            <div>
+                                <label style="font-size:0.85rem; font-weight:700; display:block; margin-bottom:8px;">Time Slot</label>
+                                <select class="input-box" style="width:100%;">
+                                    <option>10:00 AM</option>
+                                    <option>11:30 AM</option>
+                                    <option>02:30 PM</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button id="btn-trigger-booking" class="btn-filled" style="width:100%; padding:12px; margin-top: 10px;">Confirm & Book Appointment</button>
+                    </div>
+                </div>
+                <div id="booking-wizard-success" style="display:none; text-align: center; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 20px;">
+                    <div style="width:60px; height:60px; border-radius:50%; background:rgba(16,185,129,0.15); border:2px solid #10b981; display:flex; align-items:center; justify-content:center; color:#10b981; font-size:1.8rem;"><i class="fas fa-check"></i></div>
+                    <div>
+                        <h4 style="font-size:1.2rem; font-weight:800;">Ticket Booked Successfully!</h4>
+                        <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:5px;">Your token has been generated by the AI routing module.</p>
+                    </div>
+                    <div id="booking-qr-render"></div>
+                    <button onclick="resetShowcaseBooking()" class="btn-outline" style="padding: 8px 20px;">Book Another Slot</button>
+                </div>
+            `;
+
+            document.getElementById("btn-trigger-booking").addEventListener("click", () => {
+                document.getElementById("booking-wizard-step").style.display = "none";
+                document.getElementById("booking-wizard-success").style.display = "flex";
+                const sector = document.getElementById("book-sector").value;
+                const token = sector === "Hospitals" ? "H-104" : (sector === "Banks" ? "B-215" : "G-084");
+                document.getElementById("booking-qr-render").innerHTML = getSVGQR(`SMARTQUEUE:${token}`);
+            });
+
+        } else if (featureId === 'live-track') {
+            modalIcon.innerHTML = `<i class="fas fa-stream"></i>`;
+            modalTitle.innerText = "Live Queue Tracking";
+            body.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 25px;">
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">Monitor the live advancement of tokens. The queue simulator updates dynamically as the counter serves customers.</p>
+                    <div style="background: rgba(6, 9, 19, 0.55); padding: 25px; border-radius: 16px; border: 1px solid var(--glass-border);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.85rem; margin-bottom:20px; font-weight:700;">
+                            <span>Active Window: Counter 3</span>
+                            <span style="color:#ef4444; animation:pulse 1s infinite;"><i class="fas fa-circle"></i> Serving Live</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px; justify-content: space-between; overflow-x: auto; padding: 10px 0;">
+                            <div style="background:rgba(239, 68, 68, 0.15); border:1.5px solid #ef4444; padding:12px 18px; border-radius:12px; text-align:center; min-width:90px;">
+                                <strong style="display:block; font-size:1.15rem; color:#ef4444;">T-015</strong>
+                                <span style="font-size:0.65rem; color:#ef4444; font-weight:bold; text-transform:uppercase;">Serving</span>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color:var(--text-secondary);"></i>
+                            <div style="background:rgba(6,9,19,0.7); border:1px solid var(--glass-border); padding:12px 18px; border-radius:12px; text-align:center; min-width:90px;">
+                                <strong style="display:block; font-size:1.15rem;">T-016</strong>
+                                <span style="font-size:0.65rem; color:var(--text-secondary); font-weight:bold;">Next</span>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color:var(--text-secondary);"></i>
+                            <div style="background:rgba(6,9,19,0.7); border:1px solid var(--glass-border); padding:12px 18px; border-radius:12px; text-align:center; min-width:90px;">
+                                <strong style="display:block; font-size:1.15rem;">T-017</strong>
+                                <span style="font-size:0.65rem; color:var(--text-secondary); font-weight:bold;">Wait (2)</span>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color:var(--text-secondary);"></i>
+                            <div style="background:rgba(0, 242, 254, 0.1); border:1.5px solid var(--cyan); padding:12px 18px; border-radius:12px; text-align:center; min-width:90px; box-shadow:0 0 15px rgba(0,242,254,0.15);">
+                                <strong style="display:block; font-size:1.15rem; color:var(--cyan);">T-018</strong>
+                                <span style="font-size:0.65rem; color:var(--cyan); font-weight:bold; text-transform:uppercase;">Your Token</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+        } else if (featureId === 'qr-token') {
+            modalIcon.innerHTML = `<i class="fas fa-qrcode"></i>`;
+            modalTitle.innerText = "QR Code Digital Pass";
+            body.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 20px; align-items: center; text-align: center;">
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">Select your dashboard theme color below to see the scannable ticket token adapt instantly.</p>
+                    
+                    <div id="sim-qr-pass" style="background: #0c1222; border: 1.5px solid var(--cyan); border-radius: 20px; padding: 25px; width: 100%; max-width: 320px; box-shadow: 0 0 25px rgba(0, 242, 254, 0.15);">
+                        <div style="font-size: 0.7rem; color: var(--cyan); text-transform: uppercase; font-weight: 800; letter-spacing: 1.5px; margin-bottom: 15px;">SmartQueue Mobile Pass</div>
+                        <div style="background: white; padding: 12px; border-radius: 12px; display: inline-block; margin-bottom: 15px;">
+                            ${getSVGQR("SMARTPASS:CYBER")}
+                        </div>
+                        <h4 style="font-weight: 800; color: #fff; font-size: 1.05rem;">City Central Hospital</h4>
+                        <span style="font-size: 0.8rem; color: var(--text-secondary);">Token: H-048</span>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <button onclick="changePassTheme('#00f2fe', 'rgba(0, 242, 254, 0.15)')" class="btn-outline" style="padding:5px 15px; font-size:0.8rem; border-color:#00f2fe; color:#00f2fe;">Cyan</button>
+                        <button onclick="changePassTheme('#F59E0B', 'rgba(245, 158, 11, 0.15)')" class="btn-outline" style="padding:5px 15px; font-size:0.8rem; border-color:#F59E0B; color:#F59E0B;">Gold</button>
+                        <button onclick="changePassTheme('#8B5CF6', 'rgba(139, 92, 246, 0.15)')" class="btn-outline" style="padding:5px 15px; font-size:0.8rem; border-color:#8B5CF6; color:#8B5CF6;">Purple</button>
+                    </div>
+                </div>
+            `;
+
+        } else if (featureId === 'sms-notif') {
+            modalIcon.innerHTML = `<i class="fas fa-sms"></i>`;
+            modalTitle.innerText = "Alerts & Notifications";
+            body.innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 15px;">Click the dispatch triggers to simulate how SmartQueue sends SMS and browser notifications dynamically.</p>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <button onclick="triggerPhoneSMS('Token Generated successfully! Your token is B-054. Wait prediction: 12 minutes.')" class="btn-outline" style="text-align: left; padding: 12px;"><i class="fas fa-ticket-alt text-cyan"></i> 1. Dispatch Token Alert</button>
+                            <button onclick="triggerPhoneSMS('It\\'s your turn! Please proceed to Counter 3. Alert dispatched.')" class="btn-outline" style="text-align: left; padding: 12px;"><i class="fas fa-bullhorn text-cyan"></i> 2. Dispatch Called Alert</button>
+                            <button onclick="triggerPhoneSMS('Warning: High traffic load detected at Mayo Clinic. Expected delays: +15 minutes.')" class="btn-outline" style="text-align: left; padding: 12px;"><i class="fas fa-exclamation-triangle text-cyan"></i> 3. Dispatch Delay Warning</button>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: center;">
+                        <!-- Mock smartphone layout -->
+                        <div style="width: 200px; height: 350px; border: 8px solid #2a354f; border-radius: 28px; background: #050814; padding: 15px; position: relative; box-shadow: 0 10px 20px rgba(0,0,0,0.5);">
+                            <div style="width: 60px; height: 12px; background: #2a354f; border-radius: 10px; margin: 0 auto 15px;"></div>
+                            <div style="font-size: 0.65rem; color: var(--text-secondary); text-align: center; font-weight: 700; margin-bottom: 10px;">SmartMessage Console</div>
+                            <div id="phone-sms-logs" style="display: flex; flex-direction: column; gap: 8px; height: 260px; overflow-y: auto;">
+                                <div style="font-size:0.6rem; color:var(--text-secondary); text-align:center; margin-top:40px;">No messages received.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+        } else if (featureId === 'smart-dash') {
+            modalIcon.innerHTML = `<i class="fas fa-tachometer-alt"></i>`;
+            modalTitle.innerText = "Console Smart Dashboard";
+            body.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">Interact with the active ticket listing dashboard console to simulate counter-side adjustments.</p>
+                    <div style="background: rgba(6, 9, 19, 0.5); padding: 20px; border-radius: 16px; border: 1px solid var(--glass-border); display: flex; flex-direction: column; gap: 12px;" id="dash-sim-list">
+                        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(6,9,19,0.5); padding:12px 15px; border-radius:10px; border:1px solid var(--glass-border);" id="tk-row-1">
+                            <div>
+                                <strong style="color:#fff; font-size:0.95rem;">Token H-042 (Cardiology)</strong>
+                                <span style="display:block; font-size:0.75rem; color:var(--text-secondary); margin-top:2px;">Status: <span style="color:var(--cyan); font-weight:700;" id="tk-st-1">Waiting</span></span>
+                            </div>
+                            <button onclick="updateSimDashTicket(1)" class="btn-outline" style="padding:6px 14px; font-size:0.75rem;" id="tk-btn-1">Complete</button>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(6,9,19,0.5); padding:12px 15px; border-radius:10px; border:1px solid var(--glass-border);" id="tk-row-2">
+                            <div>
+                                <strong style="color:#fff; font-size:0.95rem;">Token B-105 (Loans Counter)</strong>
+                                <span style="display:block; font-size:0.75rem; color:var(--text-secondary); margin-top:2px;">Status: <span style="color:#ef4444; font-weight:700;" id="tk-st-2">Serving</span></span>
+                            </div>
+                            <button onclick="updateSimDashTicket(2)" class="btn-outline" style="padding:6px 14px; font-size:0.75rem;" id="tk-btn-2">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+        } else if (featureId === 'sec-auth') {
+            modalIcon.innerHTML = `<i class="fas fa-shield-alt"></i>`;
+            modalTitle.innerText = "Role-Based Authentication Showcase";
+            body.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">Toggle roles to inspect security bypasses and privileges active on the SmartQueue AI network.</p>
+                    
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 10px;">
+                        <button onclick="toggleAuthRole('customer')" id="role-btn-customer" class="btn-filled" style="padding: 8px 18px; font-size:0.85rem;">Customer</button>
+                        <button onclick="toggleAuthRole('operator')" id="role-btn-operator" class="btn-outline" style="padding: 8px 18px; font-size:0.85rem;">Staff Operator</button>
+                        <button onclick="toggleAuthRole('admin')" id="role-btn-admin" class="btn-outline" style="padding: 8px 18px; font-size:0.85rem;">System Admin</button>
+                    </div>
+
+                    <div style="background: rgba(6, 9, 19, 0.5); padding: 25px; border-radius: 16px; border: 1px solid var(--glass-border);" id="auth-details-box">
+                        <h4 style="font-weight:800; font-size:1.1rem; color:var(--cyan); margin-bottom:10px;"><i class="fas fa-user-circle"></i> Customer Permissions</h4>
+                        <ul style="padding-left:20px; font-size:0.9rem; line-height:1.6; color:var(--text-secondary);">
+                            <li>Register customer profile credentials</li>
+                            <li>Book appointments and check waiting times</li>
+                            <li>Download secure ticket QR passes</li>
+                            <li>Cancel or delay personal tokens</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+
+        } else if (featureId === 'analytics-stat') {
+            modalIcon.innerHTML = `<i class="fas fa-chart-pie"></i>`;
+            modalTitle.innerText = "Analytics & Volume Statistics";
+            body.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">Select dates below to dynamically compute local averages and update the interactive performance chart.</p>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 10px;">
+                        <button onclick="reloadAnalyticsChart([12, 18, 45, 20, 10, 35], 'Monday')" class="btn-outline" style="padding:5px 15px; font-size:0.8rem;">Monday</button>
+                        <button onclick="reloadAnalyticsChart([25, 40, 68, 45, 18, 55], 'Wednesday')" class="btn-outline" style="padding:5px 15px; font-size:0.8rem;">Wednesday</button>
+                        <button onclick="reloadAnalyticsChart([8, 14, 25, 12, 9, 20], 'Friday')" class="btn-outline" style="padding:5px 15px; font-size:0.8rem;">Friday</button>
+                    </div>
+                    <div style="background: rgba(6, 9, 19, 0.5); padding: 20px; border-radius: 16px; border: 1px solid var(--glass-border); height: 220px; position: relative;">
+                        <canvas id="showcaseLoadChart"></canvas>
+                    </div>
+                </div>
+            `;
+            
+            // Init default chart inside modal
+            setTimeout(() => {
+                const ctx = document.getElementById('showcaseLoadChart').getContext('2d');
+                localChartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Hospitals', 'Banks', 'Govt Desk', 'Universities', 'Repair Bays', 'Others'],
+                        datasets: [{
+                            label: 'Average Queue Time (Mins)',
+                            data: [25, 40, 68, 45, 18, 55],
+                            backgroundColor: 'rgba(0, 242, 254, 0.4)',
+                            borderColor: '#00f2fe',
+                            borderWidth: 2,
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { ticks: { color: '#8fa4c7' }, grid: { display: false } },
+                            y: { ticks: { color: '#8fa4c7' }, grid: { color: 'rgba(0, 242, 254, 0.05)' } }
+                        },
+                        plugins: { legend: { display: false } }
+                    }
+                });
+            }, 100);
+        }
+    }
+
+    // Modal Specific Sim Helpers
+    function resetShowcaseBooking() {
+        document.getElementById("booking-wizard-step").style.display = "flex";
+        document.getElementById("booking-wizard-success").style.display = "none";
+    }
+
+    function changePassTheme(color, shadow) {
+        const pass = document.getElementById("sim-qr-pass");
+        pass.style.borderColor = color;
+        pass.style.boxShadow = `0 0 25px ${shadow}`;
+        const header = pass.querySelector('div');
+        header.style.color = color;
+    }
+
+    function triggerPhoneSMS(message) {
+        const box = document.getElementById("phone-sms-logs");
+        // Clear placeholder if any
+        if (box.innerText.includes("No messages received")) {
+            box.innerHTML = "";
+        }
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        const sms = document.createElement("div");
+        sms.style.background = "rgba(0, 242, 254, 0.06)";
+        sms.style.border = "1px solid rgba(0, 242, 254, 0.2)";
+        sms.style.borderRadius = "8px";
+        sms.style.padding = "8px";
+        sms.style.fontSize = "0.62rem";
+        sms.style.color = "#ffffff";
+        sms.innerHTML = `<span style="display:block; font-size:0.5rem; color:var(--text-secondary); margin-bottom:3px; font-weight:700;">SmartQueue Dispatch - ${time}</span>${message}`;
+        
+        box.prepend(sms);
+    }
+
+    function updateSimDashTicket(id) {
+        const row = document.getElementById(`tk-row-${id}`);
+        const status = document.getElementById(`tk-st-${id}`);
+        const btn = document.getElementById(`tk-btn-${id}`);
+
+        if (id === 1) {
+            status.innerText = "Completed";
+            status.style.color = "#10B981";
+            btn.style.display = "none";
+        } else {
+            status.innerText = "Cancelled";
+            status.style.color = "#ef4444";
+            btn.style.display = "none";
+        }
+    }
+
+    function toggleAuthRole(role) {
+        const customerBtn = document.getElementById("role-btn-customer");
+        const operatorBtn = document.getElementById("role-btn-operator");
+        const adminBtn = document.getElementById("role-btn-admin");
+        const box = document.getElementById("auth-details-box");
+
+        customerBtn.className = "btn-outline";
+        operatorBtn.className = "btn-outline";
+        adminBtn.className = "btn-outline";
+
+        if (role === 'customer') {
+            customerBtn.className = "btn-filled";
+            box.innerHTML = `
+                <h4 style="font-weight:800; font-size:1.1rem; color:var(--cyan); margin-bottom:10px;"><i class="fas fa-user-circle"></i> Customer Permissions</h4>
+                <ul style="padding-left:20px; font-size:0.9rem; line-height:1.6; color:var(--text-secondary);">
+                    <li>Register customer profile credentials</li>
+                    <li>Book appointments and check waiting times</li>
+                    <li>Download secure ticket QR passes</li>
+                    <li>Cancel or delay personal tokens</li>
+                </ul>
+            `;
+        } else if (role === 'operator') {
+            operatorBtn.className = "btn-filled";
+            box.innerHTML = `
+                <h4 style="font-weight:800; font-size:1.1rem; color:#F59E0B; margin-bottom:10px;"><i class="fas fa-user-tie"></i> Staff Operator Permissions</h4>
+                <ul style="padding-left:20px; font-size:0.9rem; line-height:1.6; color:var(--text-secondary);">
+                    <li>View active queue lines and waiting patient lists</li>
+                    <li>Activate 'Call Next' bypass triggers</li>
+                    <li>Send alerts and push notifications directly to SMS terminals</li>
+                    <li>Reschedule / push token slots</li>
+                </ul>
+            `;
+        } else {
+            adminBtn.className = "btn-filled";
+            box.innerHTML = `
+                <h4 style="font-weight:800; font-size:1.1rem; color:#ef4444; margin-bottom:10px;"><i class="fas fa-user-shield"></i> System Admin Permissions</h4>
+                <ul style="padding-left:20px; font-size:0.9rem; line-height:1.6; color:var(--text-secondary);">
+                    <li>Access full analytics and operational metrics</li>
+                    <li>Override counter routing rules and priority bypass parameters</li>
+                    <li>Audit user registration logs</li>
+                    <li>Delete or clear full database queue lists</li>
+                </ul>
+            `;
+        }
+    }
+
+    function reloadAnalyticsChart(dataArray, label) {
+        if (localChartInstance) {
+            localChartInstance.data.datasets[0].data = dataArray;
+            localChartInstance.update();
+        }
+    }
+</script>
 
 {% endblock %}

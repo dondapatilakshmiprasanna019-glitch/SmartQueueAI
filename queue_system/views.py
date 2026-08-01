@@ -287,4 +287,18 @@ def ml_playground_view(request):
         })
         
     return render(request, 'queue_system/ml_playground.html')
-# force reload comment
+
+def hospital_service_view(request):
+    return render(request, 'queue_system/services/hospital.html')
+
+def bank_service_view(request):
+    return render(request, 'queue_system/services/bank.html')
+
+def university_service_view(request):
+    return render(request, 'queue_system/services/university.html')
+
+def government_service_view(request):
+    return render(request, 'queue_system/services/government.html')
+
+def service_center_service_view(request):
+    return render(request, 'queue_system/services/service_center.html')
