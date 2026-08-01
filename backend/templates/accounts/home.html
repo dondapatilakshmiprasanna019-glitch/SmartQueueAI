@@ -10,7 +10,7 @@
     <div class="hero-container-main" style="display: flex; align-items: center; justify-content: space-between; gap: 40px; text-align: left; max-width: 1400px; margin: 0 auto; flex-wrap: wrap;">
         
         <div class="hero-content" style="flex: 1; min-width: 320px;">
-            <h1 style="font-size: 3.8rem; line-height: 1.15; font-weight: 900; margin-bottom: 20px; font-family: 'Poppins', sans-serif;">AI Powered <span style="background: linear-gradient(135deg, var(--cyan) 0%, var(--blue) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 4px 10px rgba(0,242,254,0.15);">Smart Queue Management</span></h1>
+            <h1 class="text-3d" style="font-size: 3.8rem; line-height: 1.15; font-weight: 900; margin-bottom: 20px; font-family: 'Poppins', sans-serif;">AI Powered <br><span style="background: linear-gradient(135deg, var(--cyan) 0%, var(--blue) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 20px rgba(0, 242, 254, 0.45);">Smart Queue Management</span></h1>
             <p style="font-size: 1.15rem; color: var(--text-secondary); margin-bottom: 30px;">Book appointments online, predict waiting time using Artificial Intelligence, receive digital queue tokens, and track your live queue in real time.</p>
             <div class="hero-buttons" style="display: flex; gap: 15px; flex-wrap: wrap;">
                 <a href="{% url 'register' %}" class="btn-filled" style="padding: 14px 28px; font-size: 1rem; border-radius: 30px;">Get Started</a>
@@ -20,20 +20,20 @@
         
         <!-- Interactive AI Illustration (3D Orbiting Brain Layout) -->
         <div class="hero-visual" style="flex: 1; min-width: 320px; display: flex; align-items: center; justify-content: center; position: relative; height: 400px;">
-            <div class="brain-container" style="position: relative; width: 280px; height: 280px; display: flex; align-items: center; justify-content: center; background: rgba(6, 182, 212, 0.05); border-radius: 50%; box-shadow: 0 0 50px rgba(6, 182, 212, 0.1);">
-                <div class="brain-core" style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, var(--cyan) 0%, var(--blue) 100%); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: white; box-shadow: 0 0 35px var(--cyan); animation: floatBrain 4s ease-in-out infinite;">
+            <div class="brain-container" style="position: relative; width: 280px; height: 280px; display: flex; align-items: center; justify-content: center; background: rgba(0, 242, 254, 0.05); border-radius: 50%; box-shadow: 0 0 50px rgba(0, 242, 254, 0.2), inset 0 0 30px rgba(0, 242, 254, 0.1); border: 1px solid rgba(0, 242, 254, 0.15);">
+                <div class="brain-core" style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, var(--cyan) 0%, var(--blue) 100%); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: white; box-shadow: 0 0 45px rgba(0, 242, 254, 0.75), inset 0 2px 4px rgba(255, 255, 255, 0.4); animation: floatBrain 4s ease-in-out infinite;">
                     <i class="fas fa-brain"></i>
                 </div>
-                <div class="orbit orbit-1" style="position: absolute; width: 180px; height: 180px; border: 1.5px dashed rgba(6, 182, 212, 0.3); border-radius: 50%; animation: spinOrbit 12s linear infinite;">
-                    <div style="position: absolute; top: 0; left: 50%; width: 14px; height: 14px; background: var(--cyan); border-radius: 50%; box-shadow: 0 0 10px var(--cyan); transform: translate(-50%, -50%);"></div>
+                <div class="orbit orbit-1" style="position: absolute; width: 180px; height: 180px; border: 1.5px dashed rgba(0, 242, 254, 0.4); border-radius: 50%; animation: spinOrbit 12s linear infinite; box-shadow: 0 0 15px rgba(0, 242, 254, 0.1);">
+                    <div style="position: absolute; top: 0; left: 50%; width: 14px; height: 14px; background: var(--cyan); border-radius: 50%; box-shadow: 0 0 12px var(--cyan); transform: translate(-50%, -50%);"></div>
                 </div>
-                <div class="orbit orbit-2" style="position: absolute; width: 240px; height: 240px; border: 1px solid rgba(0, 118, 255, 0.2); border-radius: 50%; animation: spinOrbitReverse 20s linear infinite;">
-                    <div style="position: absolute; bottom: 0; right: 50%; width: 10px; height: 10px; background: var(--blue); border-radius: 50%; box-shadow: 0 0 8px var(--blue); transform: translate(50%, 50%);"></div>
+                <div class="orbit orbit-2" style="position: absolute; width: 240px; height: 240px; border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 50%; animation: spinOrbitReverse 20s linear infinite; box-shadow: 0 0 20px rgba(59, 130, 246, 0.08);">
+                    <div style="position: absolute; bottom: 0; right: 50%; width: 10px; height: 10px; background: var(--blue); border-radius: 50%; box-shadow: 0 0 10px var(--blue); transform: translate(50%, 50%);"></div>
                 </div>
-                               <!-- Floating category items around illustration -->
-                <div style="position: absolute; top: 10%; left: -5%; background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 8px 16px; border-radius: 12px; font-weight: 700; color: var(--text-primary); box-shadow: 0 10px 25px rgba(37,99,235,0.08);"><i class="fas fa-hospital-user text-cyan"></i> AI Triage</div>
-                <div style="position: absolute; bottom: 15%; left: -10%; background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 8px 16px; border-radius: 12px; font-weight: 700; color: var(--text-primary); box-shadow: 0 10px 25px rgba(37,99,235,0.08);"><i class="fas fa-microchip text-cyan"></i> ML Predictor</div>
-                <div style="position: absolute; top: 25%; right: -15%; background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 8px 16px; border-radius: 12px; font-weight: 700; color: var(--text-primary); box-shadow: 0 10px 25px rgba(37,99,235,0.08);"><i class="fas fa-chart-pie text-cyan"></i> Live Analytics</div>
+                <!-- Floating category items around illustration -->
+                <div style="position: absolute; top: 10%; left: -8%; background: var(--glass-bg); border: 1px solid rgba(0, 242, 254, 0.3); padding: 8px 16px; border-radius: 12px; font-weight: 700; color: #ffffff; box-shadow: 0 10px 0px 0px rgba(0, 86, 255, 0.12), 0 12px 25px rgba(0,0,0,0.5); backdrop-filter: blur(8px);"><i class="fas fa-hospital-user text-cyan"></i> AI Triage</div>
+                <div style="position: absolute; bottom: 15%; left: -12%; background: var(--glass-bg); border: 1px solid rgba(0, 242, 254, 0.3); padding: 8px 16px; border-radius: 12px; font-weight: 700; color: #ffffff; box-shadow: 0 10px 0px 0px rgba(0, 86, 255, 0.12), 0 12px 25px rgba(0,0,0,0.5); backdrop-filter: blur(8px);"><i class="fas fa-microchip text-cyan"></i> ML Predictor</div>
+                <div style="position: absolute; top: 25%; right: -18%; background: var(--glass-bg); border: 1px solid rgba(0, 242, 254, 0.3); padding: 8px 16px; border-radius: 12px; font-weight: 700; color: #ffffff; box-shadow: 0 10px 0px 0px rgba(0, 86, 255, 0.12), 0 12px 25px rgba(0,0,0,0.5); backdrop-filter: blur(8px);"><i class="fas fa-chart-pie text-cyan"></i> Live Analytics</div>
             </div>
         </div>
         
@@ -43,42 +43,42 @@
 <!-- Live Dashboard Preview Section -->
 <section id="dashboard" class="dashboard-preview" style="padding: 80px 0;">
     <h2>Live Dashboard Preview</h2>
-    <div class="service-card" style="max-width: 900px; display: block; margin: 0 auto;">
+    <div class="service-card" style="max-width: 900px; display: block; margin: 0 auto; transform: none !important; cursor: default !important; border-color: rgba(0,242,254,0.2);">
         <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; margin-bottom: 25px; flex-wrap: wrap; gap: 15px;">
-            <h4 style="font-size: 1.2rem; color: var(--text-primary); margin: 0;"><i class="fas fa-chart-line text-cyan"></i> Operational Telemetry</h4>
-            <span style="background: rgba(16, 185, 129, 0.1); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.2); padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700;"><i class="fas fa-signal"></i> System Online</span>
+            <h4 style="font-size: 1.2rem; color: #ffffff; margin: 0; font-weight: 800;"><i class="fas fa-chart-line text-cyan"></i> Operational Telemetry</h4>
+            <span style="background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.25); padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);"><i class="fas fa-signal"></i> System Online</span>
         </div>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
-            <div class="service-card" style="padding: 20px; text-align: center; box-shadow: 0 8px 15px rgba(37,99,235,0.04);">
-                <h3 style="color: var(--blue); font-size: 2.2rem; margin-bottom: 5px;">142</h3>
+            <div class="service-card" style="padding: 20px; text-align: center; box-shadow: 0 8px 0px 0px rgba(0, 102, 255, 0.15), 0 10px 20px rgba(0,0,0,0.4); border-color: rgba(0,242,254,0.15); transform: none !important; cursor: default !important;">
+                <h3 style="color: var(--cyan); font-size: 2.2rem; margin-bottom: 5px; text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);">142</h3>
                 <p style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Users Served Today</p>
             </div>
-            <div class="service-card" style="padding: 20px; text-align: center; box-shadow: 0 8px 15px rgba(37,99,235,0.04);">
-                <h3 style="color: var(--blue); font-size: 2.2rem; margin-bottom: 5px;">3.8 Min</h3>
+            <div class="service-card" style="padding: 20px; text-align: center; box-shadow: 0 8px 0px 0px rgba(0, 102, 255, 0.15), 0 10px 20px rgba(0,0,0,0.4); border-color: rgba(0,242,254,0.15); transform: none !important; cursor: default !important;">
+                <h3 style="color: var(--cyan); font-size: 2.2rem; margin-bottom: 5px; text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);">3.8 Min</h3>
                 <p style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Avg Predicted Wait</p>
             </div>
-            <div class="service-card" style="padding: 20px; text-align: center; box-shadow: 0 8px 15px rgba(37,99,235,0.04);">
-                <h3 style="color: var(--blue); font-size: 2.2rem; margin-bottom: 5px;">97.4%</h3>
+            <div class="service-card" style="padding: 20px; text-align: center; box-shadow: 0 8px 0px 0px rgba(0, 102, 255, 0.15), 0 10px 20px rgba(0,0,0,0.4); border-color: rgba(0,242,254,0.15); transform: none !important; cursor: default !important;">
+                <h3 style="color: var(--cyan); font-size: 2.2rem; margin-bottom: 5px; text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);">97.4%</h3>
                 <p style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Model Accuracy</p>
             </div>
         </div>
         
         <!-- Graphical mock container -->
-        <div style="background: rgba(37, 99, 235, 0.03); padding: 20px; border-radius: 16px; border: 1px solid rgba(37,99,235,0.1); box-shadow: inset 0 2px 8px rgba(37,99,235,0.02);">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.85rem; color: var(--text-secondary);">
+        <div style="background: rgba(6, 9, 19, 0.55); padding: 20px; border-radius: 16px; border: 1px solid rgba(0, 242, 254, 0.15); box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">
                 <span>Queue Flow Distribution</span>
-                <span>Peak Load: 4:00 PM</span>
+                <span style="color: var(--cyan);">Peak Load: 4:00 PM</span>
             </div>
             <!-- Mock bar chart -->
             <div style="display: flex; align-items: flex-end; justify-content: space-between; height: 120px; gap: 8px; padding-top: 10px;">
-                <div style="height: 30%; width: 100%; background: linear-gradient(to top, var(--blue), var(--cyan)); border-radius: 4px; opacity: 0.8;"></div>
-                <div style="height: 50%; width: 100%; background: linear-gradient(to top, var(--blue), var(--cyan)); border-radius: 4px; opacity: 0.8;"></div>
-                <div style="height: 45%; width: 100%; background: linear-gradient(to top, var(--blue), var(--cyan)); border-radius: 4px; opacity: 0.8;"></div>
-                <div style="height: 75%; width: 100%; background: linear-gradient(to top, var(--blue), var(--cyan)); border-radius: 4px; opacity: 0.8;"></div>
-                <div style="height: 95%; width: 100%; background: linear-gradient(to top, var(--blue), var(--cyan)); border-radius: 4px; opacity: 0.9; box-shadow: 0 0 10px rgba(37,99,235,0.2);"></div>
-                <div style="height: 60%; width: 100%; background: linear-gradient(to top, var(--blue), var(--cyan)); border-radius: 4px; opacity: 0.8;"></div>
-                <div style="height: 40%; width: 100%; background: linear-gradient(to top, var(--blue), var(--cyan)); border-radius: 4px; opacity: 0.8;"></div>
+                <div style="height: 30%; width: 100%; background: linear-gradient(to top, var(--blue), var(--cyan)); border-radius: 4px; opacity: 0.8; box-shadow: 0 0 8px rgba(0, 242, 254, 0.15);"></div>
+                <div style="height: 50%; width: 100%; background: linear-gradient(to top, var(--blue), var(--cyan)); border-radius: 4px; opacity: 0.8; box-shadow: 0 0 8px rgba(0, 242, 254, 0.15);"></div>
+                <div style="height: 45%; width: 100%; background: linear-gradient(to top, var(--blue), var(--cyan)); border-radius: 4px; opacity: 0.8; box-shadow: 0 0 8px rgba(0, 242, 254, 0.15);"></div>
+                <div style="height: 75%; width: 100%; background: linear-gradient(to top, var(--blue), var(--cyan)); border-radius: 4px; opacity: 0.8; box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);"></div>
+                <div style="height: 95%; width: 100%; background: linear-gradient(to top, var(--blue), var(--cyan)); border-radius: 4px; opacity: 0.95; box-shadow: 0 0 15px rgba(0, 242, 254, 0.55);"></div>
+                <div style="height: 60%; width: 100%; background: linear-gradient(to top, var(--blue), var(--cyan)); border-radius: 4px; opacity: 0.8; box-shadow: 0 0 8px rgba(0, 242, 254, 0.15);"></div>
+                <div style="height: 40%; width: 100%; background: linear-gradient(to top, var(--blue), var(--cyan)); border-radius: 4px; opacity: 0.8; box-shadow: 0 0 8px rgba(0, 242, 254, 0.15);"></div>
             </div>
         </div>
     </div>
@@ -311,8 +311,9 @@
         top: 0;
         bottom: 0;
         left: 50%;
-        width: 2px;
-        background: rgba(255, 255, 255, 0.08);
+        width: 3px;
+        background: linear-gradient(to bottom, var(--cyan), var(--blue), var(--purple));
+        box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
         transform: translateX(-50%);
     }
     .timeline-item {
@@ -341,12 +342,13 @@
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
-        width: 18px;
-        height: 18px;
+        width: 20px;
+        height: 20px;
         background: var(--bg-primary);
-        border: 4px solid;
+        border: 4.5px solid;
         border-radius: 50%;
         z-index: 2;
+        box-shadow: 0 0 15px currentColor;
     }
     
     /* Responsive timeline adjustments */

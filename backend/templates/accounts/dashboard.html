@@ -77,7 +77,7 @@
                             <p style="font-size: 0.8rem; color: var(--text-secondary); font-style: italic; border-left: 3px solid var(--blue); padding-left: 8px; margin-top: 10px;">Rules Applied: {{ latest_appointment.priority_reason }}</p>
                         </div>
                         <div style="text-align: center;">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=Token-{{ latest_appointment.token_number }}-Org-{{ latest_appointment.organization_name }}&color=2563eb&bgcolor=ffffff" alt="Ticket QR" style="border: 2px solid var(--glass-border); border-radius: 12px; background: #fff; padding: 8px; box-shadow: 0 4px 15px rgba(37,99,235,0.08);">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=Token-{{ latest_appointment.token_number }}-Org-{{ latest_appointment.organization_name }}&color=2563eb&bgcolor=ffffff" alt="Ticket QR" style="border: 2px solid rgba(0, 242, 254, 0.35); border-radius: 12px; background: #fff; padding: 8px; box-shadow: 0 4px 15px rgba(0,242,254,0.25);">
                             <p style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 8px; font-weight: 600;">Scan at desk check-in</p>
                         </div>
                     </div>
@@ -87,7 +87,7 @@
             </div>
 
             <!-- AI Engine Telemetry Predictor -->
-            <div class="service-card" style="text-align: left; padding: 30px; border-radius: 20px; background: linear-gradient(135deg, rgba(37, 99, 235, 0.03) 0%, rgba(255, 255, 255, 0.85) 100%);">
+            <div class="service-card" style="text-align: left; padding: 30px; border-radius: 20px; background: linear-gradient(135deg, rgba(0, 242, 254, 0.03) 0%, rgba(12, 18, 34, 0.85) 100%);">
                 <h2 style="font-size: 1.25rem; margin-bottom: 20px; color: var(--text-primary); border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; font-weight: 800;"><i class="fas fa-brain text-cyan"></i> AI Prediction Model (Random Forest)</h2>
                 {% if latest_appointment and latest_appointment.status == 'Waiting' or latest_appointment.status == 'Serving' %}
                     <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.95rem;">
@@ -220,8 +220,8 @@
                 labels: services,
                 datasets: [{
                     data: values,
-                    backgroundColor: ['#0ea5e9', '#2563eb', '#6366f1', '#ef4444', '#10b981'],
-                    borderColor: '#ffffff',
+                    backgroundColor: ['#00f2fe', '#3b82f6', '#8b5cf6', '#ef4444', '#10b981'],
+                    borderColor: '#0c1222',
                     borderWidth: 2
                 }]
             },
@@ -232,7 +232,7 @@
                     legend: {
                         position: 'bottom',
                         labels: {
-                            color: '#475569',
+                            color: '#8fa4c7',
                             font: { family: 'Poppins', size: 10 }
                         }
                     }
@@ -249,8 +249,8 @@
                 datasets: [{
                     label: 'Predicted Wait Time (Mins)',
                     data: [12, 28, 54, 22, 16, 38, 48, 68],
-                    backgroundColor: 'rgba(37, 99, 235, 0.45)',
-                    borderColor: '#2563eb',
+                    backgroundColor: 'rgba(0, 242, 254, 0.4)',
+                    borderColor: '#00f2fe',
                     borderWidth: 2,
                     borderRadius: 6
                 }]
@@ -260,12 +260,12 @@
                 maintainAspectRatio: false,
                 scales: {
                     y: {
-                        grid: { color: 'rgba(37, 99, 235, 0.05)' },
-                        ticks: { color: '#475569', font: { family: 'Poppins' } }
+                        grid: { color: 'rgba(255, 255, 255, 0.08)' },
+                        ticks: { color: '#8fa4c7', font: { family: 'Poppins' } }
                     },
                     x: {
                         grid: { display: false },
-                        ticks: { color: '#475569', font: { family: 'Poppins' } }
+                        ticks: { color: '#8fa4c7', font: { family: 'Poppins' } }
                     }
                 },
                 plugins: {

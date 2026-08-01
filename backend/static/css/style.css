@@ -6,16 +6,20 @@
 }
 
 :root {
-    --bg-primary: #F0F4F8;
-    --bg-secondary: #FFFFFF;
-    --accent-glow: rgba(37, 99, 235, 0.08);
-    --cyan: #0ea5e9;
-    --blue: #2563eb;
-    --purple: #6366f1;
-    --text-primary: #0f172a;
-    --text-secondary: #475569;
-    --glass-bg: rgba(255, 255, 255, 0.85);
-    --glass-border: rgba(37, 99, 235, 0.12);
+    --bg-primary: #050814;
+    --bg-secondary: #0c1222;
+    --accent-glow: rgba(0, 242, 254, 0.12);
+    --cyan: #00f2fe;
+    --blue: #3b82f6;
+    --purple: #8b5cf6;
+    --text-primary: #ffffff;
+    --text-secondary: #94a3b8;
+    --glass-bg: rgba(12, 18, 34, 0.7);
+    --glass-border: rgba(0, 242, 254, 0.15);
+    
+    /* 3D Shadows */
+    --card-3d-shadow: 0 12px 0px 0px rgba(0, 86, 255, 0.18), 0 15px 30px rgba(0, 0, 0, 0.6);
+    --button-3d-shadow: 0 5px 0px 0px #0b1a40, 0 8px 16px rgba(0, 0, 0, 0.4);
 }
 
 body {
@@ -25,9 +29,12 @@ body {
     line-height: 1.65;
     background-color: var(--bg-primary);
     background-image: 
-        radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.08) 0px, transparent 50%),
-        radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.06) 0px, transparent 50%),
-        radial-gradient(at 50% 100%, rgba(14, 165, 233, 0.05) 0px, transparent 50%);
+        radial-gradient(circle at 0% 0%, rgba(0, 242, 254, 0.08) 0px, transparent 50%),
+        radial-gradient(circle at 100% 0%, rgba(139, 92, 246, 0.06) 0px, transparent 50%),
+        radial-gradient(circle at 50% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%),
+        linear-gradient(rgba(255, 255, 255, 0.006) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.006) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 45px 45px, 45px 45px;
     background-attachment: fixed;
 }
 
@@ -55,13 +62,12 @@ section {
 /* ========== 3D TEXT EFFECT FOR HEADINGS ========== */
 .text-3d {
     text-shadow: 
-        0 1px 0 #1b263b,
-        0 2px 0 #151d2d,
-        0 3px 0 #0f1622,
-        0 4px 0 #0a0e16,
-        0 5px 0 #05070a,
-        0 6px 8px rgba(0, 0, 0, 0.6),
-        0 0 10px rgba(0, 242, 254, 0.3);
+        0 1px 0 #0d162a,
+        0 2px 0 #091020,
+        0 3px 0 #050b16,
+        0 4px 0 #02050b,
+        0 5px 6px rgba(0, 0, 0, 0.8),
+        0 0 15px rgba(0, 242, 254, 0.4);
 }
 
 /* ========== NAVBAR ========== */
@@ -69,11 +75,11 @@ section {
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(6, 9, 19, 0.75);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--glass-border);
-    box-shadow: 0 8px 30px rgba(37, 99, 235, 0.05);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 .nav-container {
@@ -91,8 +97,8 @@ section {
     color: var(--text-primary);
     letter-spacing: -0.5px;
     text-shadow: 
-        0 1px 0 #121824,
-        0 2px 0 #0b0e16,
+        0 1px 0 #0d162a,
+        0 2px 0 #050b16,
         0 0 10px rgba(0, 242, 254, 0.4);
 }
 
@@ -114,11 +120,11 @@ section {
     color: var(--text-secondary);
     position: relative;
     padding: 6px 0;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .nav-links a:hover {
-    color: var(--text-primary);
+    color: var(--cyan);
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
 }
 
 .nav-links a::after {
@@ -139,25 +145,25 @@ section {
 /* ========== TACTILE 3D BUTTONS ========== */
 .btn-outline {
     display: inline-block;
-    padding: 9px 22px;
-    background: transparent;
+    padding: 10px 24px;
+    background: rgba(0, 242, 254, 0.05);
     border: 2px solid var(--cyan);
-    border-bottom: 5px solid #00c2cb;
-    border-radius: 12px;
+    border-bottom: 5px solid #009ba6;
+    border-radius: 14px;
     color: var(--cyan) !important;
     font-weight: 700 !important;
     text-transform: uppercase;
     font-size: 0.85rem;
     letter-spacing: 0.5px;
     transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 4px 10px rgba(0, 242, 254, 0.15);
+    box-shadow: 0 4px 15px rgba(0, 242, 254, 0.1);
     cursor: pointer;
 }
 
 .btn-outline:hover {
     background: var(--cyan);
-    color: var(--bg-primary) !important;
-    border-bottom: 5px solid #00a4ad;
+    color: #050814 !important;
+    border-bottom: 5px solid #007c85;
     box-shadow: 0 0 25px rgba(0, 242, 254, 0.4);
     transform: translateY(-2px);
 }
@@ -170,31 +176,31 @@ section {
 
 .btn-filled, .book-btn {
     display: inline-block;
-    padding: 12px 26px;
+    padding: 13px 28px;
     background: linear-gradient(180deg, var(--cyan) 0%, var(--blue) 100%);
     border: none;
-    border-bottom: 5px solid #0054c7;
-    border-radius: 12px;
+    border-bottom: 5px solid #1d4ed8;
+    border-radius: 14px;
     color: #fff !important;
     font-weight: 700 !important;
     text-transform: uppercase;
     font-size: 0.88rem;
     letter-spacing: 0.5px;
-    box-shadow: 0 6px 15px rgba(0, 118, 255, 0.35);
+    box-shadow: var(--button-3d-shadow);
     transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     cursor: pointer;
     text-align: center;
 }
 
 .btn-filled:hover, .book-btn:hover {
-    box-shadow: 0 8px 25px rgba(0, 118, 255, 0.55);
+    box-shadow: 0 8px 25px rgba(0, 242, 254, 0.3), var(--button-3d-shadow);
     transform: translateY(-2px);
 }
 
 .btn-filled:active, .book-btn:active {
     transform: translateY(3px);
     border-bottom-width: 1px;
-    box-shadow: 0 1px 5px rgba(0, 118, 255, 0.3);
+    box-shadow: 0 1px 5px rgba(0, 102, 255, 0.3);
 }
 
 /* ========== HERO ========== */
@@ -305,24 +311,25 @@ section {
     border: 1px solid var(--glass-border);
     padding: 40px 30px;
     border-radius: 24px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    /* Light premium 3D shadow style */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* Premium 3D solid shadow */
     box-shadow: 
-        0 12px 0px -4px rgba(37, 99, 235, 0.08), 
-        0 16px 25px rgba(37, 99, 235, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        0 12px 0px 0px rgba(0, 102, 255, 0.12), 
+        0 15px 30px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
     position: relative;
     overflow: hidden;
 }
 
 .service-card:hover, .why-item:hover {
-    transform: translateY(-8px) scale(1.02);
-    border-color: rgba(37, 99, 235, 0.3);
+    transform: translateY(-10px) scale(1.02);
+    border-color: rgba(0, 242, 254, 0.4);
     box-shadow: 
-        0 18px 0px -5px rgba(37, 99, 235, 0.12), 
-        0 25px 40px rgba(37, 99, 235, 0.12);
+        0 18px 0px 0px rgba(0, 242, 254, 0.22), 
+        0 25px 40px rgba(0, 242, 254, 0.15),
+        0 0 25px rgba(0, 242, 254, 0.1);
 }
 
 .service-card h3 {
@@ -515,19 +522,19 @@ section {
 .form-group input, .input-box {
     width: 100%;
     padding: 14px 18px;
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(37, 99, 235, 0.15);
+    background: rgba(6, 9, 19, 0.6);
+    border: 1px solid rgba(0, 242, 254, 0.2);
     border-radius: 12px;
     font-size: 0.98rem;
-    color: var(--text-primary);
+    color: #ffffff;
     transition: all 0.3s ease;
 }
 
 .form-group input:focus, .input-box:focus {
     outline: none;
-    border-color: var(--blue);
-    box-shadow: 0 0 15px rgba(37, 99, 235, 0.2);
-    background: #FFFFFF;
+    border-color: var(--cyan);
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+    background: rgba(6, 9, 19, 0.85);
 }
 
 .full-width {
@@ -565,12 +572,12 @@ section {
     padding: 55px 45px;
     border-radius: 28px;
     box-shadow: 
-        0 15px 0px -4px rgba(37, 99, 235, 0.08), 
-        0 20px 35px rgba(37, 99, 235, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        0 15px 0px 0px rgba(0, 102, 255, 0.12), 
+        0 25px 50px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
     max-width: 850px;
     margin: 50px auto;
-    backdrop-filter: blur(14px);
+    backdrop-filter: blur(16px);
 }
 
 .appointment-card h1 {
