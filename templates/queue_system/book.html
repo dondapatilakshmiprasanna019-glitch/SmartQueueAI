@@ -1,0 +1,589 @@
+{% extends "accounts/base.html" %}
+
+{% block content %}
+
+<section class="hero" style="padding: 40px 5% 80px;">
+
+    <!-- Wizard Container -->
+    <div class="appointment-card" style="max-width: 800px; margin-top: 0; padding: 40px 30px;">
+        
+        <!-- Progress Steps Tracker -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; position: relative;">
+            <div style="position: absolute; top: 50%; left: 0; right: 0; height: 3px; background: rgba(0, 242, 254, 0.08); z-index: 1;">
+                <div id="progress-bar-fill" style="width: 16%; height: 100%; background: linear-gradient(90deg, var(--cyan), var(--blue)); transition: width 0.4s ease;"></div>
+            </div>
+            
+            <div class="step-indicator active" data-step="1" style="z-index: 2; width: 40px; height: 40px; border-radius: 50%; background: var(--bg-secondary); border: 2.5px solid var(--cyan); color: var(--cyan); font-weight: 700; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(0,242,254,0.3); transition: all 0.3s ease;">1</div>
+            <div class="step-indicator" data-step="2" style="z-index: 2; width: 40px; height: 40px; border-radius: 50%; background: var(--bg-secondary); border: 2.5px solid rgba(0, 242, 254, 0.15); color: var(--text-secondary); font-weight: 700; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">2</div>
+            <div class="step-indicator" data-step="3" style="z-index: 2; width: 40px; height: 40px; border-radius: 50%; background: var(--bg-secondary); border: 2.5px solid rgba(0, 242, 254, 0.15); color: var(--text-secondary); font-weight: 700; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">3</div>
+            <div class="step-indicator" data-step="4" style="z-index: 2; width: 40px; height: 40px; border-radius: 50%; background: var(--bg-secondary); border: 2.5px solid rgba(0, 242, 254, 0.15); color: var(--text-secondary); font-weight: 700; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">4</div>
+            <div class="step-indicator" data-step="5" style="z-index: 2; width: 40px; height: 40px; border-radius: 50%; background: var(--bg-secondary); border: 2.5px solid rgba(0, 242, 254, 0.15); color: var(--text-secondary); font-weight: 700; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">5</div>
+            <div class="step-indicator" data-step="6" style="z-index: 2; width: 40px; height: 40px; border-radius: 50%; background: var(--bg-secondary); border: 2.5px solid rgba(0, 242, 254, 0.15); color: var(--text-secondary); font-weight: 700; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">6</div>
+        </div>
+
+        <h2 id="step-title" style="font-size: 1.8rem; font-family: 'Poppins', sans-serif; text-align: center; margin-bottom: 8px; font-weight: 800;">Choose Category</h2>
+        <p id="step-subtitle" style="text-align: center; color: var(--text-secondary); margin-bottom: 35px; font-size: 0.95rem;">Select the industry or queue vertical you want to visit</p>
+
+        <!-- Standard Django Form with Hidden Field Bindings -->
+        <form method="POST" id="booking-wizard-form">
+            {% csrf_token %}
+            
+            <!-- Hidden Fields for Database Sync -->
+            <input type="hidden" name="service" id="id_service" required>
+            <input type="hidden" name="organization_name" id="id_organization_name" required>
+            <input type="hidden" name="department" id="id_department" required>
+            <input type="hidden" name="doctor_or_counter" id="id_doctor_or_counter" required>
+            <input type="hidden" name="appointment_date" id="id_appointment_date" required>
+            <input type="hidden" name="appointment_time" id="id_appointment_time" required>
+            <input type="hidden" name="distance" id="id_distance" value="1.2 km">
+            <input type="hidden" name="estimated_wait_time" id="id_estimated_wait_time" value="15">
+            <input type="hidden" name="confidence_score" id="id_confidence_score" value="95">
+
+            <!-- STEP 1: CATEGORY -->
+            <div class="wizard-step" id="step-1-container">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 20px;">
+                    <div class="category-card service-card" data-val="Hospital" style="text-align: center; cursor: pointer; padding: 25px 15px;">
+                        <div style="font-size: 2.2rem; color: var(--blue); margin-bottom: 12px;"><i class="fas fa-hospital"></i></div>
+                        <h4 style="font-size: 1.1rem; margin-bottom: 6px;">Hospital</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-secondary);">Clinic & Emergency</p>
+                    </div>
+                    <div class="category-card service-card" data-val="Bank" style="text-align: center; cursor: pointer; padding: 25px 15px;">
+                        <div style="font-size: 2.2rem; color: var(--blue); margin-bottom: 12px;"><i class="fas fa-university"></i></div>
+                        <h4 style="font-size: 1.1rem; margin-bottom: 6px;">Bank</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-secondary);">Finance & Loans</p>
+                    </div>
+                    <div class="category-card service-card" data-val="Government" style="text-align: center; cursor: pointer; padding: 25px 15px;">
+                        <div style="font-size: 2.2rem; color: var(--blue); margin-bottom: 12px;"><i class="fas fa-gavel"></i></div>
+                        <h4 style="font-size: 1.1rem; margin-bottom: 6px;">Government</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-secondary);">Civic & Permits</p>
+                    </div>
+                    <div class="category-card service-card" data-val="University" style="text-align: center; cursor: pointer; padding: 25px 15px;">
+                        <div style="font-size: 2.2rem; color: var(--blue); margin-bottom: 12px;"><i class="fas fa-graduation-cap"></i></div>
+                        <h4 style="font-size: 1.1rem; margin-bottom: 6px;">University</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-secondary);">Advising & Registrar</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2: ORGANIZATIONS -->
+            <div class="wizard-step" id="step-2-container" style="display: none;">
+                <div id="org-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                    <!-- Dynamic realistic card elements injected by JS -->
+                </div>
+            </div>
+
+            <!-- STEP 3: DEPARTMENTS -->
+            <div class="wizard-step" id="step-3-container" style="display: none;">
+                <div id="dept-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <!-- Dynamic department selectors injected by JS -->
+                </div>
+            </div>
+
+            <!-- STEP 4: DOCTOR OR COUNTER -->
+            <div class="wizard-step" id="step-4-container" style="display: none;">
+                <div id="counter-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <!-- Dynamic doctor or counter options injected by JS -->
+                </div>
+            </div>
+
+            <!-- STEP 5: DATE & TIME SELECTOR -->
+            <div class="wizard-step" id="step-5-container" style="display: none;">
+                <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+                    
+                    <!-- Date select pane -->
+                    <div style="flex: 1; min-width: 250px; text-align: left;">
+                        <label style="font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 8px;">Select Visit Date</label>
+                        <input type="date" id="date-picker-element" class="input-box" style="width: 100%;">
+                    </div>
+                    
+                    <!-- Time grid select -->
+                    <div style="flex: 1.5; min-width: 280px; text-align: left;">
+                        <label style="font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 8px;">Available Arrival Windows</label>
+                        <div id="time-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px;">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <!-- STEP 6: AI PREDICTIONS & TELEMETRY -->
+            <div class="wizard-step" id="step-6-container" style="display: none;">
+                <div style="display: flex; flex-direction: column; gap: 20px; align-items: center; text-align: center;">
+                    
+                    <!-- AI Brain Icon animation -->
+                    <div style="position: relative; width: 90px; height: 90px; display: flex; align-items: center; justify-content: center; background: rgba(0, 242, 254, 0.08); border-radius: 50%; margin-bottom: 10px; border: 2px solid var(--cyan); box-shadow: 0 0 25px rgba(0, 242, 254, 0.25);">
+                        <i class="fas fa-brain" style="font-size: 2.5rem; color: var(--cyan); animation: pulse 1.8s infinite;"></i>
+                    </div>
+
+                    <!-- AI prediction summary panel -->
+                    <div class="service-card" style="width: 100%; text-align: left; padding: 25px; background: linear-gradient(135deg, rgba(0, 242, 254, 0.03) 0%, rgba(12, 18, 34, 0.85) 100%);">
+                        <h4 style="font-size: 1rem; color: var(--cyan); margin-bottom: 15px; font-weight: 700; text-transform: uppercase;"><i class="fas fa-microchip"></i> SmartQueue AI Predictions</h4>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                            <div style="background: rgba(6, 9, 19, 0.65); border: 1px solid var(--glass-border); padding: 12px 18px; border-radius: 12px;">
+                                <span style="font-size: 0.78rem; color: var(--text-secondary); display: block; font-weight: 700; text-transform: uppercase;">Estimated Wait</span>
+                                <strong id="ai-wait-time-value" style="font-size: 1.35rem; color: var(--cyan);">15 Mins</strong>
+                            </div>
+                            <div style="background: rgba(6, 9, 19, 0.65); border: 1px solid var(--glass-border); padding: 12px 18px; border-radius: 12px;">
+                                <span style="font-size: 0.78rem; color: var(--text-secondary); display: block; font-weight: 700; text-transform: uppercase;">Model Confidence</span>
+                                <strong id="ai-confidence-value" style="font-size: 1.35rem; color: #10B981;">94%</strong>
+                            </div>
+                            <div style="background: rgba(6, 9, 19, 0.65); border: 1px solid var(--glass-border); padding: 12px 18px; border-radius: 12px;">
+                                <span style="font-size: 0.78rem; color: var(--text-secondary); display: block; font-weight: 700; text-transform: uppercase;">Organization Distance</span>
+                                <strong id="ai-distance-value" style="font-size: 1.35rem; color: #ffffff;">1.2 km</strong>
+                            </div>
+                        </div>
+
+                        <!-- Priority Selector inside Prediction Step to see wait time fluctuate -->
+                        <div style="margin-top: 15px;">
+                            <label style="font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 8px; font-size: 0.88rem;">Select Priority Status (AI Triage Routing)</label>
+                            <select name="priority" id="id_priority" class="input-box" style="width: 100%;">
+                                <option value="Regular">Regular (Standard Queue Rule)</option>
+                                <option value="Senior Citizen">Senior Citizen (Priority Lane)</option>
+                                <option value="VIP">VIP Client Privilege</option>
+                                <option value="Emergency">Emergency Triage Bypass</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <!-- BUTTON CONTROLS -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; border-top: 1px solid var(--glass-border); padding-top: 25px;">
+                <button type="button" id="prev-btn" class="btn-outline" style="visibility: hidden; padding: 10px 25px; border-radius: 30px;">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                
+                <button type="button" id="next-btn" class="btn-filled" style="padding: 10px 25px; border-radius: 30px;">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+                
+                <button type="submit" id="submit-btn" class="btn-filled" style="display: none; padding: 10px 25px; border-radius: 30px; background: linear-gradient(180deg, var(--cyan) 0%, var(--blue) 100%);">
+                    <i class="fas fa-ticket-alt"></i> Generate QR Ticket
+                </button>
+            </div>
+            
+        </form>
+
+    </div>
+
+</section>
+
+<!-- Custom Interactive Script for the Multi-Step Wizard -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    let currentStep = 1;
+    const totalSteps = 6;
+    
+    // Elements
+    const prevBtn = document.getElementById("prev-btn");
+    const nextBtn = document.getElementById("next-btn");
+    const submitBtn = document.getElementById("submit-btn");
+    const progressBarFill = document.getElementById("progress-bar-fill");
+    const stepTitle = document.getElementById("step-title");
+    const stepSubtitle = document.getElementById("step-subtitle");
+    
+    // Form Inputs
+    const inputService = document.getElementById("id_service");
+    const inputOrg = document.getElementById("id_organization_name");
+    const inputDept = document.getElementById("id_department");
+    const inputDoctor = document.getElementById("id_doctor_or_counter");
+    const inputDate = document.getElementById("id_appointment_date");
+    const inputTime = document.getElementById("id_appointment_time");
+    const inputDistance = document.getElementById("id_distance");
+    const inputWaitTime = document.getElementById("id_estimated_wait_time");
+    const inputConfidence = document.getElementById("id_confidence_score");
+    const inputPriority = document.getElementById("id_priority");
+
+    // Dynamic Lists
+    const orgList = document.getElementById("org-list");
+    const deptList = document.getElementById("dept-list");
+    const counterList = document.getElementById("counter-list");
+    const timeGrid = document.getElementById("time-grid");
+    const datePicker = document.getElementById("date-picker-element");
+
+    // Default Date Initialization
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const yyyy = tomorrow.getFullYear();
+    const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+    const dd = String(tomorrow.getDate()).padStart(2, '0');
+    datePicker.value = `${yyyy}-${mm}-${dd}`;
+    datePicker.min = `${yyyy}-${mm}-${dd}`;
+    inputDate.value = `${yyyy}-${mm}-${dd}`;
+
+    // Organization Data Map
+    const orgData = {
+        "Hospital": [
+            { name: "St. Jude Medical Center", address: "456 Healthcare Pkwy", rating: "4.8", distance: "1.2 km", wait: 15, img: `hospital` },
+            { name: "City General Hospital", address: "789 Care Blvd", rating: "4.5", distance: "3.4 km", wait: 35, img: `hospital` }
+        ],
+        "Bank": [
+            { name: "Apex Global Bank", address: "101 Finance Way", rating: "4.6", distance: "0.8 km", wait: 8, img: `bank` },
+            { name: "National Union Bank", address: "202 Capital St", rating: "4.2", distance: "2.1 km", wait: 18, img: `bank` }
+        ],
+        "Government": [
+            { name: "Department of Motor Vehicles (DMV)", address: "555 Civic Plaza", rating: "3.2", distance: "4.5 km", wait: 55, img: `government` },
+            { name: "Federal Passport Agency", address: "777 Authority Rd", rating: "4.1", distance: "5.0 km", wait: 42, img: `government` }
+        ],
+        "University": [
+            { name: "Pacific State University", address: "888 Campus Rd", rating: "4.7", distance: "1.8 km", wait: 10, img: `university` },
+            { name: "Metro Institute of Technology", address: "999 Tech Dr", rating: "4.9", distance: "3.2 km", wait: 12, img: `university` }
+        ]
+    };
+
+    // Category Selector triggers Step 1 completion
+    document.querySelectorAll(".category-card").forEach(card => {
+        card.addEventListener("click", function() {
+            document.querySelectorAll(".category-card").forEach(c => {
+                c.style.borderColor = "var(--glass-border)";
+                c.style.boxShadow = "var(--card-3d-shadow)";
+            });
+            this.style.borderColor = "var(--cyan)";
+            this.style.boxShadow = "0 12px 0px 0px rgba(0, 242, 254, 0.2), 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 242, 254, 0.25)";
+            
+            const selectedService = this.getAttribute("data-val");
+            inputService.value = selectedService;
+            
+            buildOrganizations(selectedService);
+            goToStep(2);
+        });
+    });
+
+    // Step 2 builders
+    function buildOrganizations(service) {
+        orgList.innerHTML = "";
+        const list = orgData[service] || [];
+        list.forEach(org => {
+            const card = document.createElement("div");
+            card.className = "service-card org-card";
+            card.style.cursor = "pointer";
+            card.style.padding = "20px";
+            card.style.display = "flex";
+            card.style.flexDirection = "column";
+            card.style.gap = "15px";
+            card.style.border = "1.5px solid var(--glass-border)";
+            card.setAttribute("data-name", org.name);
+            card.setAttribute("data-distance", org.distance);
+            card.setAttribute("data-wait", org.wait);
+
+            // Vector illustrations based on type (cyberpunk/neon styled)
+            let svgImage = "";
+            if (org.img === 'hospital') {
+                svgImage = `<svg style="width:100%; height:120px;" viewBox="0 0 200 120"><rect x="10" y="40" width="180" height="70" rx="10" fill="rgba(6,9,19,0.7)" stroke="var(--cyan)" stroke-width="3"/><rect x="80" y="10" width="40" height="30" rx="5" fill="rgba(6,9,19,0.7)" stroke="var(--cyan)" stroke-width="3"/><path d="M100 20 v10 M95 25 h10" stroke="#ef4444" stroke-width="4" stroke-linecap="round"/><circle cx="50" cy="75" r="15" fill="rgba(0,242,254,0.08)"/><circle cx="150" cy="75" r="15" fill="rgba(0,242,254,0.08)"/></svg>`;
+            } else if (org.img === 'bank') {
+                svgImage = `<svg style="width:100%; height:120px;" viewBox="0 0 200 120"><path d="M10 45 L100 10 L190 45 Z" fill="rgba(6,9,19,0.7)" stroke="var(--cyan)" stroke-width="3"/><rect x="25" y="45" width="150" height="10" fill="var(--cyan)"/><rect x="35" y="55" width="20" height="50" fill="rgba(6,9,19,0.7)" stroke="var(--cyan)" stroke-width="3"/><rect x="75" y="55" width="20" height="50" fill="rgba(6,9,19,0.7)" stroke="var(--cyan)" stroke-width="3"/><rect x="105" y="55" width="20" height="50" fill="rgba(6,9,19,0.7)" stroke="var(--cyan)" stroke-width="3"/><rect x="145" y="55" width="20" height="50" fill="rgba(6,9,19,0.7)" stroke="var(--cyan)" stroke-width="3"/><rect x="15" y="105" width="170" height="10" fill="var(--cyan)"/></svg>`;
+            } else if (org.img === 'government') {
+                svgImage = `<svg style="width:100%; height:120px;" viewBox="0 0 200 120"><rect x="20" y="40" width="160" height="70" rx="5" fill="rgba(6,9,19,0.7)" stroke="var(--cyan)" stroke-width="3"/><polygon points="10,40 100,15 190,40" fill="var(--cyan)"/><rect x="90" y="70" width="20" height="40" fill="rgba(6,9,19,0.9)" stroke="var(--cyan)" stroke-width="3"/><line x1="45" y1="60" x2="65" y2="60" stroke="var(--cyan)" stroke-width="3"/><line x1="45" y1="75" x2="65" y2="75" stroke="var(--cyan)" stroke-width="3"/><line x1="135" y1="60" x2="155" y2="60" stroke="var(--cyan)" stroke-width="3"/></svg>`;
+            } else {
+                svgImage = `<svg style="width:100%; height:120px;" viewBox="0 0 200 120"><polygon points="100,10 10,50 190,50" fill="var(--cyan)"/><rect x="30" y="50" width="140" height="55" fill="rgba(6,9,19,0.7)" stroke="var(--cyan)" stroke-width="3"/><rect x="85" y="75" width="30" height="30" fill="rgba(6,9,19,0.9)" stroke="var(--cyan)" stroke-width="2"/><line x1="100" y1="10" x2="100" y2="110" stroke="rgba(0,242,254,0.15)" stroke-width="2"/></svg>`;
+            }
+
+            card.innerHTML = `
+                <div style="border-radius:12px; overflow:hidden; background:rgba(6, 9, 19, 0.45); border:1px solid rgba(0,242,254,0.12); padding:5px;">${svgImage}</div>
+                <div>
+                    <h4 style="font-size:1.15rem; color:#ffffff; margin-bottom:5px; font-weight:800;">${org.name}</h4>
+                    <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:10px;"><i class="fas fa-map-marker-alt text-cyan"></i> ${org.address}</p>
+                    <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; flex-wrap:wrap; gap:8px;">
+                        <span style="color:#F59E0B; font-weight:700;"><i class="fas fa-star"></i> ${org.rating}</span>
+                        <span style="color:var(--text-secondary); font-weight:600;"><i class="fas fa-location-arrow"></i> ${org.distance}</span>
+                        <span style="background:rgba(0,242,254,0.08); color:var(--cyan); padding:3px 10px; border-radius:20px; font-weight:700; border: 1px solid rgba(0,242,254,0.15);">⏱ ~${org.wait}m wait</span>
+                    </div>
+                </div>
+            `;
+
+            card.addEventListener("click", function() {
+                document.querySelectorAll(".org-card").forEach(c => {
+                    c.style.borderColor = "var(--glass-border)";
+                    c.style.boxShadow = "var(--card-3d-shadow)";
+                });
+                this.style.borderColor = "var(--cyan)";
+                this.style.boxShadow = "0 12px 0px 0px rgba(0, 242, 254, 0.2), 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 242, 254, 0.25)";
+                
+                inputOrg.value = this.getAttribute("data-name");
+                inputDistance.value = this.getAttribute("data-distance");
+                
+                buildDepartments(service);
+                goToStep(3);
+            });
+
+            orgList.appendChild(card);
+        });
+    }
+
+    // Step 3 builders
+    const serviceDepts = {
+        "Hospital": ["Cardiology", "Pediatrics", "General Consulting", "Orthopedics"],
+        "Bank": ["Teller Service", "Loans & Mortgages", "Account Services", "Wealth Operations"],
+        "Government": ["License Operations", "Registry Desk", "Visa Services", "Notary Approvals"],
+        "University": ["Admissions Helpdesk", "Registrar Desk", "Financial Aid Aid", "Dean of Students"]
+    };
+
+    function buildDepartments(service) {
+        deptList.innerHTML = "";
+        const depts = serviceDepts[service] || [];
+        depts.forEach(dept => {
+            const card = document.createElement("div");
+            card.className = "service-card dept-card";
+            card.style.cursor = "pointer";
+            card.style.padding = "20px";
+            card.style.textAlign = "center";
+            card.style.border = "1.5px solid var(--glass-border)";
+            card.innerHTML = `
+                <div style="font-size:1.8rem; color:var(--cyan); margin-bottom:10px;"><i class="fas fa-briefcase"></i></div>
+                <h4 style="font-size:1.05rem; margin-bottom:0; font-weight:800; color:#ffffff;">${dept}</h4>
+            `;
+
+            card.addEventListener("click", function() {
+                document.querySelectorAll(".dept-card").forEach(c => {
+                    c.style.borderColor = "var(--glass-border)";
+                    c.style.boxShadow = "var(--card-3d-shadow)";
+                });
+                this.style.borderColor = "var(--cyan)";
+                this.style.boxShadow = "0 12px 0px 0px rgba(0, 242, 254, 0.2), 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 242, 254, 0.25)";
+                
+                inputDept.value = dept;
+                
+                buildCounters(service, dept);
+                goToStep(4);
+            });
+            deptList.appendChild(card);
+        });
+    }
+
+    // Step 4 builders
+    function buildCounters(service, dept) {
+        counterList.innerHTML = "";
+        let list = [];
+        if (service === "Hospital") {
+            list = ["Dr. Sarah Connor", "Dr. Gregory House", "Dr. John Watson", "Dr. Meredith Grey"];
+        } else if (service === "Bank") {
+            list = ["Counter 1 - Fast Cash", "Counter 2 - Service Desk", "Counter 3 - Loans Officer", "Counter 4 - Priority Desk"];
+        } else if (service === "Government") {
+            list = ["Window A", "Window B", "Window C", "Window D"];
+        } else {
+            list = ["Helpdesk Counter 1", "Helpdesk Counter 2", "IT Desk Alpha", "Staff Room Desk"];
+        }
+
+        list.forEach(c => {
+            const card = document.createElement("div");
+            card.className = "service-card counter-card";
+            card.style.cursor = "pointer";
+            card.style.padding = "20px";
+            card.style.textAlign = "center";
+            card.style.border = "1.5px solid var(--glass-border)";
+            card.innerHTML = `
+                <div style="font-size:1.8rem; color:var(--cyan); margin-bottom:10px;"><i class="fas fa-user-tie"></i></div>
+                <h4 style="font-size:1.02rem; margin-bottom:0; font-weight:800; color:#ffffff;">${c}</h4>
+            `;
+
+            card.addEventListener("click", function() {
+                document.querySelectorAll(".counter-card").forEach(cc => {
+                    cc.style.borderColor = "var(--glass-border)";
+                    cc.style.boxShadow = "var(--card-3d-shadow)";
+                });
+                this.style.borderColor = "var(--cyan)";
+                this.style.boxShadow = "0 12px 0px 0px rgba(0, 242, 254, 0.2), 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 242, 254, 0.25)";
+                
+                inputDoctor.value = c;
+                
+                buildTimeSlots();
+                goToStep(5);
+            });
+            counterList.appendChild(card);
+        });
+    }
+
+    // Step 5: Times slots
+    function buildTimeSlots() {
+        timeGrid.innerHTML = "";
+        const slots = [
+            "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", 
+            "12:00 PM", "12:30 PM", "01:30 PM", "02:00 PM", "02:30 PM", "03:00 PM",
+            "03:30 PM", "04:00 PM"
+        ];
+        slots.forEach(slot => {
+            const sItem = document.createElement("div");
+            sItem.className = "time-slot-item";
+            sItem.style.background = "rgba(6, 9, 19, 0.6)";
+            sItem.style.border = "1.5px solid var(--glass-border)";
+            sItem.style.padding = "10px 8px";
+            sItem.style.borderRadius = "8px";
+            sItem.style.fontSize = "0.85rem";
+            sItem.style.fontWeight = "700";
+            sItem.style.cursor = "pointer";
+            sItem.style.color = "var(--text-secondary)";
+            sItem.style.textAlign = "center";
+            sItem.style.transition = "all 0.2s ease";
+            sItem.innerText = slot;
+
+            sItem.addEventListener("click", function() {
+                document.querySelectorAll(".time-slot-item").forEach(si => {
+                    si.style.background = "rgba(6, 9, 19, 0.6)";
+                    si.style.borderColor = "var(--glass-border)";
+                    si.style.color = "var(--text-secondary)";
+                });
+                this.style.background = "var(--cyan)";
+                this.style.borderColor = "var(--cyan)";
+                this.style.color = "#050814";
+                
+                inputTime.value = slot;
+                
+                calculateAIPrediction();
+                goToStep(6);
+            });
+            timeGrid.appendChild(sItem);
+        });
+    }
+
+    datePicker.addEventListener("change", function() {
+        inputDate.value = this.value;
+    });
+
+    // Step 6: AI Predictions Telemetry AJAX
+    function calculateAIPrediction() {
+        const query = `ajax=1&people_ahead=4&avg_service_time=10&department=${inputService.value}&priority=${inputPriority.value}&hour=10&day_of_week=2`;
+        fetch(`/ml-playground/?${query}`)
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("ai-wait-time-value").innerText = `${data.wait_time} Mins`;
+                document.getElementById("ai-confidence-value").innerText = `${data.confidence}%`;
+                document.getElementById("ai-distance-value").innerText = inputDistance.value;
+                
+                inputWaitTime.value = data.wait_time;
+                inputConfidence.value = data.confidence;
+            })
+            .catch(e => {
+                console.error("AI engine AJAX lookup failed, using fallback.", e);
+            });
+    }
+
+    inputPriority.addEventListener("change", function() {
+        calculateAIPrediction();
+    });
+
+    // Step control functions
+    function goToStep(step) {
+        if (step < 1 || step > totalSteps) return;
+        
+        // Hide all steps
+        document.querySelectorAll(".wizard-step").forEach(el => el.style.display = "none");
+        
+        // Show current step
+        document.getElementById(`step-${step}-container`).style.display = "block";
+        
+        // Update indicator styles
+        document.querySelectorAll(".step-indicator").forEach(ind => {
+            const isNo = parseInt(ind.getAttribute("data-step"));
+            if (isNo === step) {
+                ind.className = "step-indicator active";
+                ind.style.borderColor = "var(--cyan)";
+                ind.style.color = "var(--cyan)";
+                ind.style.background = "var(--bg-secondary)";
+                ind.style.boxShadow = "0 0 12px rgba(0, 242, 254, 0.3)";
+            } else if (isNo < step) {
+                ind.className = "step-indicator completed";
+                ind.style.borderColor = "var(--cyan)";
+                ind.style.color = "#050814";
+                ind.style.background = "var(--cyan)";
+                ind.style.boxShadow = "0 0 10px rgba(0, 242, 254, 0.25)";
+                ind.innerHTML = `<i class="fas fa-check"></i>`;
+            } else {
+                ind.className = "step-indicator";
+                ind.style.borderColor = "rgba(0, 242, 254, 0.15)";
+                ind.style.color = "var(--text-secondary)";
+                ind.style.background = "var(--bg-secondary)";
+                ind.style.boxShadow = "none";
+                ind.innerText = isNo;
+            }
+        });
+
+        // Set labels
+        const titles = {
+            1: ["Choose Category", "Select the industry or queue vertical you want to visit"],
+            2: ["Choose Organization", "Select a business or organization facility to visit"],
+            3: ["Choose Department / Service", "Select the specific service or department segment"],
+            4: ["Select Doctor / Counter", "Choose a consultant practitioner or desk window queue"],
+            5: ["Pick Date and Time", "Configure your reservation calendar check-in schedule"],
+            6: ["AI Telemetry & Confirm", "Review intelligent prediction estimates and request ticket"]
+        };
+        stepTitle.innerText = titles[step][0];
+        stepSubtitle.innerText = titles[step][1];
+
+        // Back button visibility
+        if (step > 1) {
+            prevBtn.style.visibility = "visible";
+        } else {
+            prevBtn.style.visibility = "hidden";
+        }
+
+        // Next & Submit button toggles
+        if (step === totalSteps) {
+            nextBtn.style.display = "none";
+            submitBtn.style.display = "block";
+        } else {
+            nextBtn.style.display = "block";
+            submitBtn.style.display = "none";
+        }
+
+        currentStep = step;
+        progressBarFill.style.width = `${((step - 1) / (totalSteps - 1)) * 100}%`;
+    }
+
+    nextBtn.addEventListener("click", function() {
+        // Validation per step before advance
+        if (currentStep === 1 && !inputService.value) {
+            alert("Please select a category");
+            return;
+        }
+        if (currentStep === 2 && !inputOrg.value) {
+            alert("Please select an organization");
+            return;
+        }
+        if (currentStep === 3 && !inputDept.value) {
+            alert("Please select a department");
+            return;
+        }
+        if (currentStep === 4 && !inputDoctor.value) {
+            alert("Please select a doctor or counter");
+            return;
+        }
+        if (currentStep === 5 && !inputTime.value) {
+            alert("Please select a time slot");
+            return;
+        }
+        
+        goToStep(currentStep + 1);
+    });
+
+    prevBtn.addEventListener("click", function() {
+        goToStep(currentStep - 1);
+    });
+});
+</script>
+
+<style>
+/* Pulsing and spinning keyframes */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+    100% { transform: scale(1); }
+}
+@keyframes floatBrain {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+@keyframes spinOrbit {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+@keyframes spinOrbitReverse {
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
+}
+</style>
+
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends "accounts/base.html" %}
+
+{% block content %}
+
+<section class="hero" style="padding: 40px 5% 80px;">
+
+<div class="appointment-card" style="max-width: 1000px; margin-top: 0; padding: 40px 30px;">
+
+    <h1 style="text-align: center; font-family: 'Poppins', sans-serif; font-weight: 900; color: var(--text-primary); font-size: 2.8rem; margin-bottom: 10px;">
+        SmartQueue Admin Panel
+    </h1>
+    <p style="text-align: center; color: var(--text-secondary); font-size: 1.15rem; margin-bottom: 45px;">
+        AI Triage & Live Token Control Room
+    </p>
+
+    <!-- Admin stats summary -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin-bottom: 40px;">
+        <div class="service-card" style="padding: 20px; text-align: center; box-shadow: 0 10px 0px -4px rgba(37,99,235,0.06); border-radius: 18px;">
+            <h3 style="font-size: 2rem; color: var(--blue); margin-bottom: 5px;">{{ total }}</h3>
+            <p style="color: var(--text-secondary); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Total Load</p>
+        </div>
+        <div class="service-card" style="padding: 20px; text-align: center; box-shadow: 0 10px 0px -4px rgba(37,99,235,0.06); border-radius: 18px;">
+            <h3 style="font-size: 2rem; color: #F59E0B; margin-bottom: 5px;">{{ waiting }}</h3>
+            <p style="color: var(--text-secondary); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Awaiting Triage</p>
+        </div>
+        <div class="service-card" style="padding: 20px; text-align: center; box-shadow: 0 10px 0px -4px rgba(37,99,235,0.06); border-radius: 18px;">
+            <h3 style="font-size: 2rem; color: #10B981; margin-bottom: 5px;">{{ completed }}</h3>
+            <p style="color: var(--text-secondary); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Processed</p>
+        </div>
+    </div>
+
+    <!-- Active Tickets Queue List -->
+    <div style="display: flex; flex-direction: column; gap: 25px;">
+        {% for appointment in appointments %}
+            <div class="service-card" style="text-align: left; padding: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; border-radius: 20px;">
+                
+                <div style="flex: 1; min-width: 280px;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 12px; flex-wrap: wrap;">
+                        <span style="font-size: 1.45rem; color: var(--blue); font-weight: 900;"><i class="fas fa-ticket-alt"></i> Token: {{ appointment.token_number }}</span>
+                        
+                        <!-- Priority Triage Badge -->
+                        <span style="font-size: 0.72rem; padding: 4px 12px; border-radius: 20px; font-weight: 800; text-transform: uppercase;
+                            {% if appointment.priority == 'Emergency' %}background: rgba(239, 68, 68, 0.1); color: #EF4444; border: 1px solid rgba(239,68,68,0.2);
+                            {% elif appointment.priority == 'Senior Citizen' %}background: rgba(14, 165, 233, 0.1); color: var(--cyan); border: 1px solid rgba(14,165,233,0.2);
+                            {% elif appointment.priority == 'VIP' %}background: rgba(99, 102, 241, 0.1); color: var(--purple); border: 1px solid rgba(99,102,241,0.2);
+                            {% else %}background: rgba(71, 85, 105, 0.08); color: var(--text-secondary); border: 1px solid rgba(71,85,105,0.15);{% endif %}">
+                            {{ appointment.priority }}
+                        </span>
+                        
+                        <!-- Approval badge -->
+                        {% if appointment.is_approved %}
+                            <span style="font-size: 0.72rem; background: rgba(16, 185, 129, 0.1); color: #10B981; border: 1px solid rgba(16,185,129,0.2); padding: 4px 12px; border-radius: 20px; font-weight: 800; text-transform: uppercase;">Approved</span>
+                        {% else %}
+                            <span style="font-size: 0.72rem; background: rgba(245, 158, 11, 0.1); color: #D97706; border: 1px solid rgba(245,158,11,0.2); padding: 4px 12px; border-radius: 20px; font-weight: 800; text-transform: uppercase;">Pending Approval</span>
+                        {% endif %}
+                    </div>
+
+                    <p style="margin-bottom: 6px; color: var(--text-primary);"><strong>Facility:</strong> {{ appointment.organization_name }} ({{ appointment.service }})</p>
+                    <p style="margin-bottom: 6px; color: var(--text-primary);"><strong>Department:</strong> {{ appointment.department }} • <strong>Assignee Desk:</strong> {{ appointment.doctor_or_counter|default:"Counter 1" }}</p>
+                    <p style="margin-bottom: 6px; color: var(--text-primary);"><strong>User Customer:</strong> {{ appointment.user.username }} ({{ appointment.user.email|default:"No email registered" }})</p>
+                    <p style="margin-bottom: 6px; color: var(--text-primary);"><strong>Scheduled Slot:</strong> {{ appointment.appointment_time }} ({{ appointment.appointment_date }})</p>
+                    <p style="margin-bottom: 6px; color: var(--text-primary);"><strong>Est. Wait time:</strong> <span style="color: var(--blue); font-weight: 700;">{{ appointment.estimated_wait_time }} Mins</span> (Model Confidence: {{ appointment.confidence_score }}%)</p>
+                    <p style="margin-bottom: 6px; font-size: 0.82rem; color: var(--text-secondary); font-style: italic; border-left: 3.5px solid var(--blue); padding-left: 8px; margin-top: 10px;"><strong>Triage Rule:</strong> {{ appointment.priority_reason }}</p>
+                    <p style="margin-top: 10px; font-size: 0.9rem;"><strong>Status:</strong> 
+                        <span style="color: {% if appointment.status == 'Serving' %}var(--cyan){% elif appointment.status == 'Completed' %}#10B981{% elif appointment.status == 'Cancelled' %}#EF4444{% else %}#D97706{% endif %}; font-weight: bold; text-transform: uppercase;">
+                            {{ appointment.status }}
+                        </span>
+                    </p>
+                </div>
+
+                <!-- Admin Action Operations -->
+                <div style="display: flex; gap: 10px; flex-direction: column; align-items: flex-end; justify-content: center; min-width: 180px;">
+                    
+                    {% if appointment.status == "Waiting" %}
+                        <a href="{% url 'call_next' appointment.id %}" class="btn-filled" style="width: 100%; text-align: center; padding: 10px 20px; font-size: 0.9rem; border-radius: 8px; box-shadow: none;">
+                            <i class="fas fa-bullhorn"></i> Call Customer
+                        </a>
+                        
+                        <a href="{% url 'delay_booking' appointment.id %}" class="btn-outline" style="width: 100%; text-align: center; padding: 8px 20px; font-size: 0.85rem; border-radius: 8px; border-color: #F59E0B; color: #D97706 !important;">
+                            <i class="fas fa-hourglass-half"></i> Delay 15 Mins
+                        </a>
+                        
+                        {% if not appointment.is_approved %}
+                            <a href="{% url 'approve_booking' appointment.id %}" class="btn-outline" style="width: 100%; text-align: center; padding: 8px 20px; font-size: 0.85rem; border-radius: 8px; border-color: #10B981; color: #10B981 !important;">
+                                <i class="fas fa-check"></i> Approve Booking
+                            </a>
+                        {% endif %}
+                        
+                        <a href="{% url 'cancel_booking' appointment.id %}" class="btn-outline" style="width: 100%; text-align: center; padding: 8px 20px; font-size: 0.85rem; border-radius: 8px; border-color: #EF4444; color: #EF4444 !important;">
+                            <i class="fas fa-ban"></i> Cancel Ticket
+                        </a>
+                    {% endif %}
+
+                </div>
+
+            </div>
+        {% empty %}
+            <div class="service-card" style="text-align: center; padding: 60px 0; border-radius: 20px;">
+                <h3 style="color: var(--text-secondary); margin: 0;">No appointments registered in system</h3>
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+</section>
+
+{% endblock %}
