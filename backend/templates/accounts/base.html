@@ -1,0 +1,223 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SmartQueue AI{% endblock %}</title>
+    
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome 6 for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=1.0">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{% url 'home' %}" class="nav-logo">SmartQueue<span>AI</span></a>
+            <ul class="nav-links">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'ml_playground' %}">AI Playground</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                    <li><a href="{% url 'book' %}">Book</a></li>
+                    {% if user.is_staff %}
+                        <li><a href="{% url 'admin_queue' %}">Admin Queue</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'logout' %}" class="btn-outline">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'home' %}#services">Services</a></li>
+                    <li><a href="{% url 'home' %}#why">Why Us</a></li>
+                    <li><a href="{% url 'login' %}" class="btn-outline">Login</a></li>
+                    <li><a href="{% url 'register' %}" class="btn-filled">Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        {% if messages %}
+            <div class="messages-container" style="max-width: 850px; margin: 30px auto 0; padding: 0 20px;">
+                {% for message in messages %}
+                    <div class="message-banner" style="padding: 16px 20px; border-radius: 12px; background: rgba(6, 182, 212, 0.15); border: 1px solid var(--cyan); color: #fff; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; font-weight: 600; box-shadow: 0 0 15px rgba(6, 182, 212, 0.2); animation: slideDown 0.4s ease-out;">
+                        <span style="font-size: 1.25rem;">🔔</span>
+                        <div>{{ message }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>SmartQueue<span>AI</span></h3>
+                <p>AI-powered queue management for modern businesses.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Product</h4>
+                <a href="#services">Services</a>
+                <a href="#dashboard">Dashboard</a>
+                <a href="#why">Why Choose Us</a>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+                <a href="#">Careers</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 SmartQueueAI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Chatbot Button -->
+    <button id="chatbotBtn" class="btn-filled" title="AI Chatbot" style="position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 0;">
+        <i class="fas fa-comments"></i>
+    </button>
+
+    <!-- Chatbot Modal -->
+    <div id="chatbotModal" style="display: none; position: fixed; bottom: 105px; right: 30px; width: 350px; height: 450px; background: rgba(12, 18, 34, 0.95); border: 1px solid var(--glass-border); border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 242, 254, 0.2); backdrop-filter: blur(16px); z-index: 9999; flex-direction: column; overflow: hidden; animation: slideDown 0.3s ease-out;">
+        <!-- Header -->
+        <div style="background: rgba(6, 9, 19, 0.85); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border);">
+            <span style="font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 8px;"><i class="fas fa-robot text-cyan"></i> SmartQueue AI Assistant</span>
+            <button id="closeChatbot" style="background: transparent; border: none; color: var(--text-secondary); cursor: pointer; font-size: 1.1rem;"><i class="fas fa-times"></i></button>
+        </div>
+        <!-- Body -->
+        <div id="chatbotBody" style="flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem;">
+            <div style="display: flex; gap: 10px; align-items: flex-start;">
+                <div style="width: 28px; height: 28px; border-radius: 50%; background: rgba(0, 242, 254, 0.1); border: 1.5px solid var(--cyan); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--cyan); flex-shrink: 0;">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div style="background: rgba(0, 242, 254, 0.08); padding: 10px 14px; border-radius: 12px; max-width: 80%; border: 1px solid var(--glass-border); color: #ffffff;">
+                    Hello! I'm your SmartQueue AI assistant. Ask me about wait times, booking, or how the queue works!
+                </div>
+            </div>
+        </div>
+        <!-- Footer -->
+        <div style="padding: 12px 20px; display: flex; gap: 10px; background: rgba(6, 9, 19, 0.5); border-top: 1px solid var(--glass-border);">
+            <input type="text" id="chatbotInput" style="flex: 1; background: rgba(6, 9, 19, 0.6); border: 1px solid rgba(0, 242, 254, 0.2); border-radius: 8px; color: #ffffff; padding: 8px 12px; font-size: 0.88rem; outline: none;" placeholder="Type your message...">
+            <button id="chatbotSendBtn" class="btn-filled" style="padding: 8px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; border-bottom: 2px solid #1d4ed8; box-shadow: none;"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- Chatbot script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const btn = document.getElementById("chatbotBtn");
+            const modal = document.getElementById("chatbotModal");
+            const close = document.getElementById("closeChatbot");
+            const input = document.getElementById("chatbotInput");
+            const sendBtn = document.getElementById("chatbotSendBtn");
+            const body = document.getElementById("chatbotBody");
+
+            btn.addEventListener("click", function() {
+                if (modal.style.display === "none") {
+                    modal.style.display = "flex";
+                    input.focus();
+                } else {
+                    modal.style.display = "none";
+                }
+            });
+
+            close.addEventListener("click", function() {
+                modal.style.display = "none";
+            });
+
+            function addMsg(text, isUser) {
+                const row = document.createElement("div");
+                row.style.display = "flex";
+                row.style.gap = "10px";
+                row.style.alignItems = "flex-start";
+                if (isUser) {
+                    row.style.justifyContent = "flex-end";
+                }
+                
+                const avatar = document.createElement("div");
+                avatar.style.width = "28px";
+                avatar.style.height = "28px";
+                avatar.style.borderRadius = "50%;";
+                avatar.style.display = "flex";
+                avatar.style.alignItems = "center";
+                avatar.style.justifyContent = "center";
+                avatar.style.fontSize = "0.8rem";
+                avatar.style.flexShrink = "0";
+                
+                if (isUser) {
+                    avatar.style.background = "rgba(59, 130, 246, 0.15)";
+                    avatar.style.border = "1.5px solid var(--blue)";
+                    avatar.style.color = "var(--blue)";
+                    avatar.innerHTML = `<i class="fas fa-user"></i>`;
+                } else {
+                    avatar.style.background = "rgba(0, 242, 254, 0.15)";
+                    avatar.style.border = "1.5px solid var(--cyan)";
+                    avatar.style.color = "var(--cyan)";
+                    avatar.innerHTML = `<i class="fas fa-robot"></i>`;
+                }
+
+                const content = document.createElement("div");
+                content.style.background = isUser ? "linear-gradient(135deg, var(--cyan) 0%, var(--blue) 100%)" : "rgba(0, 242, 254, 0.08)";
+                content.style.padding = "10px 14px";
+                content.style.borderRadius = "12px";
+                content.style.maxWidth = "80%";
+                content.style.border = "1px solid var(--glass-border)";
+                content.style.color = "#ffffff";
+                content.style.textShadow = isUser ? "0 1px 2px rgba(0, 0, 0, 0.2)" : "none";
+                content.innerText = text;
+
+                if (isUser) {
+                    row.appendChild(content);
+                    row.appendChild(avatar);
+                } else {
+                    row.appendChild(avatar);
+                    row.appendChild(content);
+                }
+                
+                body.appendChild(row);
+                body.scrollTop = body.scrollHeight;
+            }
+
+            function processResponse() {
+                const text = input.value.trim();
+                if (!text) return;
+                addMsg(text, true);
+                input.value = "";
+
+                // Simulated typing response
+                setTimeout(function() {
+                    const cleanText = text.toLowerCase();
+                    let reply = "I'm here to help you navigate SmartQueue! Try asking 'How do I book?' or 'Which services are supported?'";
+                    
+                    if (cleanText.includes("wait") || cleanText.includes("time") || cleanText.includes("token")) {
+                        reply = "Your estimated wait time is calculated in real time by our Machine Learning predictor. Please check the 'Latest Appointment' card on your Dashboard for your active token status and wait predictions.";
+                    } else if (cleanText.includes("book") || cleanText.includes("appointment")) {
+                        reply = "To book an appointment, click 'Book' in the navigation menu. Select your desired service sector, review the smart time-slot recommendations, select your date, and confirm your booking.";
+                    } else if (cleanText.includes("service") || cleanText.includes("sector")) {
+                        reply = "We support and optimize waiting queues across five sectors: Hospital Check-ins, Banking, University Administration, Government Offices, and Service Centers.";
+                    } else if (cleanText.includes("admin") || cleanText.includes("call")) {
+                        reply = "If you have staff/operator privileges, you can access the 'Admin Queue' page via the top menu to view all active appointments and call the next waiting customer.";
+                    }
+                    
+                    addMsg(reply, false);
+                }, 800);
+            }
+
+            sendBtn.addEventListener("click", processResponse);
+            input.addEventListener("keydown", function(e) {
+                if (e.key === "Enter") {
+                    processResponse();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
